@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CentOS上搭建GitLab的详细过程</title>
+    <url>/posts/d9f56853.html</url>
+    <content><![CDATA[<h2 id="Git的优点和缺点介绍"><a href="#Git的优点和缺点介绍" class="headerlink" title="Git的优点和缺点介绍"></a>Git的优点和缺点介绍</h2><h3 id="Git优点"><a href="#Git优点" class="headerlink" title="Git优点"></a>Git优点</h3><ul>
+<li>1、适合分布式开发，强调个体</li>
+<li>2、公共服务器压力和数据量都不会太大</li>
+<li>3、速度快、灵活</li>
+<li>4、任意两个开发者之间可以很容易的解决冲突</li>
+<li>5、离线可以正常提交代码和工作</li>
+</ul>
+<h3 id="Git缺点"><a href="#Git缺点" class="headerlink" title="Git缺点"></a>Git缺点</h3><ul>
+<li>1、学习周期相对而言比较长</li>
+<li>2、不符合常规思维</li>
+<li>3、代码保密性差，一旦开发者把整个库克隆下来就可以完全公开所有代码和版本信息</li>
+</ul>
+<h2 id="1-准备环境"><a href="#1-准备环境" class="headerlink" title="1.准备环境"></a>1.准备环境</h2><p>操作系统： CentOS 8 （搞清楚自己的环境，如果不知道 请输入以下命令）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CentOS:<span class="comment">#  cat /etc/redhat-release</span></span><br><span class="line">CentOS Linux release 8.1.1911 (Core)</span><br></pre></td></tr></table></figure>
+<p>Ubuntu 系统命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Ubuntu:<span class="comment"># lsb_release -a</span></span><br><span class="line">No LSB modules are available.</span><br><span class="line">Distributor ID: Ubuntu</span><br><span class="line">Description:    Ubuntu 18.04</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-安装依赖包："><a href="#1-安装依赖包：" class="headerlink" title="1.安装依赖包："></a>1.安装依赖包：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo dnf install curl openssh-server ca-certificates postfix</span><br><span class="line"><span class="comment"># Ubuntu 命令为 apt</span></span><br></pre></td></tr></table></figure>
+
+<p>注：执行完成后，出现邮件配置，选择Internet那一项（不带Smarthost的）,选择完后，后面的东西，随便填吧，没啥卵用~</p>
+<h3 id="2-修改镜像源地址"><a href="#2-修改镜像源地址" class="headerlink" title="2.修改镜像源地址"></a>2.修改镜像源地址</h3><p>常用的国内源地址</p>
+<ul>
+<li>阿里源： <a href="http://mirrors.aliyun.com/" title="阿里云源">http://mirrors.aliyun.com/</a></li>
+<li>清华大学：<a href="https://mirrors.tuna.tsinghua.edu.cn/" title="清华大学源">https://mirrors.tuna.tsinghua.edu.cn/</a></li>
+<li>中科大：<a href="https://mirrors.ustc.edu.cn/" title="中科大源">https://mirrors.ustc.edu.cn/</a></li>
+</ul>
+<p>我们利用清华大学的镜像</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">https://mirror.tuna.tsinghua.edu.cn/help/gitlab-ce/</span><br></pre></td></tr></table></figure>
+<p>来进行主程序的安装。首先信任 GitLab 的 GPG 公钥：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl https://packages.gitlab.com/gpg.key 2&gt; /dev/null | sudo apt-key add - &amp;&gt;/dev/null</span><br><span class="line"><span class="comment"># 查看修改源地址</span></span><br><span class="line">sudo  vi /etc/yum.repos.d/gitlab_gitlab-ee.repo</span><br><span class="line">[gitlab_gitlab-ee]</span><br><span class="line">name=gitlab_gitlab-ee</span><br><span class="line">baseurl=https://packages.gitlab.com/gitlab/gitlab-ee/el/8/<span class="variable">$basearch</span></span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey</span><br><span class="line">       https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">metadata_expire=300</span><br><span class="line"></span><br><span class="line">[gitlab_gitlab-ee-source]</span><br><span class="line">name=gitlab_gitlab-ee-source</span><br><span class="line">baseurl=https://packages.gitlab.com/gitlab/gitlab-ee/el/8/SRPMS</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey</span><br><span class="line">       https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">metadata_expire=300</span><br></pre></td></tr></table></figure>
+
+<p>安装 gitlab-ce:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo dnf update</span><br><span class="line">sudo dnf install gitlab-ce</span><br></pre></td></tr></table></figure>
+
+<p>注： 有点慢 耐心等吧~<br>修改配置 ：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /etc/gitlab/gitlab.rb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更改 external_url</span></span><br><span class="line">external_url =http://192.168.1.10 <span class="comment"># (IP换成你本机的IP地址)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-启动sshd和postfix服务"><a href="#3-启动sshd和postfix服务" class="headerlink" title="3.启动sshd和postfix服务"></a>3.启动sshd和postfix服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo systemctl start sshd</span><br><span class="line">sudo systemctl start postfix</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-添加防火墙规则"><a href="#4-添加防火墙规则" class="headerlink" title="4.添加防火墙规则"></a>4.添加防火墙规则</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-启动各项服务"><a href="#5-启动各项服务" class="headerlink" title="5.启动各项服务"></a>5.启动各项服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+
+<p>有点慢，须要稍等下。</p>
+<p>上面这一步可能会失败，报错如下：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">ERROR: user[git] (gitlab&#x27;&#x27;users line 34) ......</span><br></pre></td></tr></table></figure>
+
+<p>解决办法：进入到文件： &#x2F;etc&#x2F;gitlab&#x2F;gitlab.rb，找到下面他们俩：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">user[‘username’]=’git’</span><br><span class="line">User[‘group’]=’git’</span><br><span class="line"><span class="comment"># 讲git改为gitlab。然后初始化配置</span></span><br><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+
+<p>这时又报错，查了下说是至少大于等于2G CPU运行内存，修改内存后解决</p>
+<h3 id="6-查看安装是否成功"><a href="#6-查看安装是否成功" class="headerlink" title="6.查看安装是否成功"></a>6.查看安装是否成功</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo gitlab-ctl status</span><br></pre></td></tr></table></figure>
+
+<p>出现一下画面就OK了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo gitlab-ctl status</span><br><span class="line">run: alertmanager: (pid 22060) 15s; run: <span class="built_in">log</span>: (pid 22146) 15s</span><br><span class="line">run: gitaly: (pid 21990) 17s; run: <span class="built_in">log</span>: (pid 22003) 16s</span><br><span class="line">run: gitlab-monitor: (pid 22026) 16s; run: <span class="built_in">log</span>: (pid 22030) 16s</span><br><span class="line">run: gitlab-workhorse: (pid 21973) 17s; run: <span class="built_in">log</span>: (pid 21981) 17s</span><br><span class="line">run: logrotate: (pid 21526) 64s; run: <span class="built_in">log</span>: (pid 21983) 17s</span><br><span class="line">run: nginx: (pid 21498) 66s; run: <span class="built_in">log</span>: (pid 21982) 17s</span><br><span class="line">run: node-exporter: (pid 21753) 52s; run: <span class="built_in">log</span>: (pid 22004) 16s</span><br><span class="line">run: postgres-exporter: (pid 22153) 15s; run: <span class="built_in">log</span>: (pid 22161) 14s</span><br><span class="line">run: postgresql: (pid 21187) 201s; run: <span class="built_in">log</span>: (pid 21964) 17s</span><br><span class="line">run: prometheus: (pid 22039) 15s; run: <span class="built_in">log</span>: (pid 22053) 15s</span><br><span class="line">run: redis: (pid 21117) 207s; run: <span class="built_in">log</span>: (pid 21963) 17s</span><br><span class="line">run: redis-exporter: (pid 21791) 44s; run: <span class="built_in">log</span>: (pid 22031) 16s</span><br><span class="line">run: sidekiq: (pid 21465) 73s; run: <span class="built_in">log</span>: (pid 21966) 17s</span><br><span class="line">run: unicorn: (pid 21428) 79s; run: <span class="built_in">log</span>: (pid 21965) 17s</span><br></pre></td></tr></table></figure>
+
+<p>登陆地址 ，就是刚才你刚才添加到配置文件的那个地址登陆访问（无需输入端口）：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://192.168.1.10</span><br></pre></td></tr></table></figure>
+
+<p>上来先让你初始化密码，剩下的就是界面画操作。 (帐号密码在上面gitlab.rb中有设置)<br>安装到此结束~</p>
+<p>注：gitlab在服务器中的默认代码存放的位置是 &#x2F;var&#x2F;opt&#x2F;gitlab&#x2F;git-data&#x2F;repositories</p>
+]]></content>
+      <categories>
+        <category>环境部署</category>
+        <category>GitLab</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>GitLab</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Centos7双网卡绑定配置 bonding</title>
     <url>/posts/e3a7.html</url>
     <content><![CDATA[<h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>当linux系统上有多个单独网卡，又想充分利用这些网卡，同时对外提供一个统一的网络地址，以使得增大网络的吞吐量，同时也提高网络的可用性，这时就需要bond来帮助我们解决这个问题。</p>
@@ -109,80 +183,6 @@
         <tag>CentOS</tag>
         <tag>Linux</tag>
         <tag>Ubuntu</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS上搭建GitLab的详细过程</title>
-    <url>/posts/d9f56853.html</url>
-    <content><![CDATA[<h2 id="Git的优点和缺点介绍"><a href="#Git的优点和缺点介绍" class="headerlink" title="Git的优点和缺点介绍"></a>Git的优点和缺点介绍</h2><h3 id="Git优点"><a href="#Git优点" class="headerlink" title="Git优点"></a>Git优点</h3><ul>
-<li>1、适合分布式开发，强调个体</li>
-<li>2、公共服务器压力和数据量都不会太大</li>
-<li>3、速度快、灵活</li>
-<li>4、任意两个开发者之间可以很容易的解决冲突</li>
-<li>5、离线可以正常提交代码和工作</li>
-</ul>
-<h3 id="Git缺点"><a href="#Git缺点" class="headerlink" title="Git缺点"></a>Git缺点</h3><ul>
-<li>1、学习周期相对而言比较长</li>
-<li>2、不符合常规思维</li>
-<li>3、代码保密性差，一旦开发者把整个库克隆下来就可以完全公开所有代码和版本信息</li>
-</ul>
-<h2 id="1-准备环境"><a href="#1-准备环境" class="headerlink" title="1.准备环境"></a>1.准备环境</h2><p>操作系统： CentOS 8 （搞清楚自己的环境，如果不知道 请输入以下命令）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CentOS:<span class="comment">#  cat /etc/redhat-release</span></span><br><span class="line">CentOS Linux release 8.1.1911 (Core)</span><br></pre></td></tr></table></figure>
-<p>Ubuntu 系统命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Ubuntu:<span class="comment"># lsb_release -a</span></span><br><span class="line">No LSB modules are available.</span><br><span class="line">Distributor ID: Ubuntu</span><br><span class="line">Description:    Ubuntu 18.04</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-安装依赖包："><a href="#1-安装依赖包：" class="headerlink" title="1.安装依赖包："></a>1.安装依赖包：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo dnf install curl openssh-server ca-certificates postfix</span><br><span class="line"><span class="comment"># Ubuntu 命令为 apt</span></span><br></pre></td></tr></table></figure>
-
-<p>注：执行完成后，出现邮件配置，选择Internet那一项（不带Smarthost的）,选择完后，后面的东西，随便填吧，没啥卵用~</p>
-<h3 id="2-修改镜像源地址"><a href="#2-修改镜像源地址" class="headerlink" title="2.修改镜像源地址"></a>2.修改镜像源地址</h3><p>常用的国内源地址</p>
-<ul>
-<li>阿里源： <a href="http://mirrors.aliyun.com/" title="阿里云源">http://mirrors.aliyun.com/</a></li>
-<li>清华大学：<a href="https://mirrors.tuna.tsinghua.edu.cn/" title="清华大学源">https://mirrors.tuna.tsinghua.edu.cn/</a></li>
-<li>中科大：<a href="https://mirrors.ustc.edu.cn/" title="中科大源">https://mirrors.ustc.edu.cn/</a></li>
-</ul>
-<p>我们利用清华大学的镜像</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">https://mirror.tuna.tsinghua.edu.cn/help/gitlab-ce/</span><br></pre></td></tr></table></figure>
-<p>来进行主程序的安装。首先信任 GitLab 的 GPG 公钥：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl https://packages.gitlab.com/gpg.key 2&gt; /dev/null | sudo apt-key add - &amp;&gt;/dev/null</span><br><span class="line"><span class="comment"># 查看修改源地址</span></span><br><span class="line">sudo  vi /etc/yum.repos.d/gitlab_gitlab-ee.repo</span><br><span class="line">[gitlab_gitlab-ee]</span><br><span class="line">name=gitlab_gitlab-ee</span><br><span class="line">baseurl=https://packages.gitlab.com/gitlab/gitlab-ee/el/8/<span class="variable">$basearch</span></span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey</span><br><span class="line">       https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">metadata_expire=300</span><br><span class="line"></span><br><span class="line">[gitlab_gitlab-ee-source]</span><br><span class="line">name=gitlab_gitlab-ee-source</span><br><span class="line">baseurl=https://packages.gitlab.com/gitlab/gitlab-ee/el/8/SRPMS</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey</span><br><span class="line">       https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">metadata_expire=300</span><br></pre></td></tr></table></figure>
-
-<p>安装 gitlab-ce:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo dnf update</span><br><span class="line">sudo dnf install gitlab-ce</span><br></pre></td></tr></table></figure>
-
-<p>注： 有点慢 耐心等吧~<br>修改配置 ：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /etc/gitlab/gitlab.rb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更改 external_url</span></span><br><span class="line">external_url =http://192.168.1.10 <span class="comment"># (IP换成你本机的IP地址)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-启动sshd和postfix服务"><a href="#3-启动sshd和postfix服务" class="headerlink" title="3.启动sshd和postfix服务"></a>3.启动sshd和postfix服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo systemctl start sshd</span><br><span class="line">sudo systemctl start postfix</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-添加防火墙规则"><a href="#4-添加防火墙规则" class="headerlink" title="4.添加防火墙规则"></a>4.添加防火墙规则</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-启动各项服务"><a href="#5-启动各项服务" class="headerlink" title="5.启动各项服务"></a>5.启动各项服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
-
-<p>有点慢，须要稍等下。</p>
-<p>上面这一步可能会失败，报错如下：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">ERROR: user[git] (gitlab&#x27;&#x27;users line 34) ......</span><br></pre></td></tr></table></figure>
-
-<p>解决办法：进入到文件： &#x2F;etc&#x2F;gitlab&#x2F;gitlab.rb，找到下面他们俩：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">user[‘username’]=’git’</span><br><span class="line">User[‘group’]=’git’</span><br><span class="line"><span class="comment"># 讲git改为gitlab。然后初始化配置</span></span><br><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
-
-<p>这时又报错，查了下说是至少大于等于2G CPU运行内存，修改内存后解决</p>
-<h3 id="6-查看安装是否成功"><a href="#6-查看安装是否成功" class="headerlink" title="6.查看安装是否成功"></a>6.查看安装是否成功</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo gitlab-ctl status</span><br></pre></td></tr></table></figure>
-
-<p>出现一下画面就OK了：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo gitlab-ctl status</span><br><span class="line">run: alertmanager: (pid 22060) 15s; run: <span class="built_in">log</span>: (pid 22146) 15s</span><br><span class="line">run: gitaly: (pid 21990) 17s; run: <span class="built_in">log</span>: (pid 22003) 16s</span><br><span class="line">run: gitlab-monitor: (pid 22026) 16s; run: <span class="built_in">log</span>: (pid 22030) 16s</span><br><span class="line">run: gitlab-workhorse: (pid 21973) 17s; run: <span class="built_in">log</span>: (pid 21981) 17s</span><br><span class="line">run: logrotate: (pid 21526) 64s; run: <span class="built_in">log</span>: (pid 21983) 17s</span><br><span class="line">run: nginx: (pid 21498) 66s; run: <span class="built_in">log</span>: (pid 21982) 17s</span><br><span class="line">run: node-exporter: (pid 21753) 52s; run: <span class="built_in">log</span>: (pid 22004) 16s</span><br><span class="line">run: postgres-exporter: (pid 22153) 15s; run: <span class="built_in">log</span>: (pid 22161) 14s</span><br><span class="line">run: postgresql: (pid 21187) 201s; run: <span class="built_in">log</span>: (pid 21964) 17s</span><br><span class="line">run: prometheus: (pid 22039) 15s; run: <span class="built_in">log</span>: (pid 22053) 15s</span><br><span class="line">run: redis: (pid 21117) 207s; run: <span class="built_in">log</span>: (pid 21963) 17s</span><br><span class="line">run: redis-exporter: (pid 21791) 44s; run: <span class="built_in">log</span>: (pid 22031) 16s</span><br><span class="line">run: sidekiq: (pid 21465) 73s; run: <span class="built_in">log</span>: (pid 21966) 17s</span><br><span class="line">run: unicorn: (pid 21428) 79s; run: <span class="built_in">log</span>: (pid 21965) 17s</span><br></pre></td></tr></table></figure>
-
-<p>登陆地址 ，就是刚才你刚才添加到配置文件的那个地址登陆访问（无需输入端口）：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">http://192.168.1.10</span><br></pre></td></tr></table></figure>
-
-<p>上来先让你初始化密码，剩下的就是界面画操作。 (帐号密码在上面gitlab.rb中有设置)<br>安装到此结束~</p>
-<p>注：gitlab在服务器中的默认代码存放的位置是 &#x2F;var&#x2F;opt&#x2F;gitlab&#x2F;git-data&#x2F;repositories</p>
-]]></content>
-      <categories>
-        <category>环境部署</category>
-        <category>GitLab</category>
-      </categories>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>GitLab</tag>
       </tags>
   </entry>
   <entry>
@@ -447,8 +447,8 @@
         <category>环境部署</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>GitLab</tag>
+        <tag>Linux</tag>
         <tag>Docker</tag>
       </tags>
   </entry>
@@ -1441,64 +1441,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hexo版本升级指南</title>
-    <url>/posts/15ac.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>更换了新主题，在hexo g和hexo s的时候总会报如下错误，在主题github issues逛了一圈后，感觉应该是我的hexo版本太老了。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜ hexo s</span><br><span class="line">(node:64285) [DEP0061] DeprecationWarning: fs.SyncWriteStream is deprecated.</span><br><span class="line">INFO  Start processing</span><br><span class="line">ERROR Process failed: layout/archive.ejs</span><br><span class="line">SyntaxError: Invalid or unexpected token in &quot;/Users/lanvnal/Files/blog/themes/hexo-theme-matery/layout/archive.ejs&quot;</span><br><span class="line">    at new Function (&lt;anonymous&gt;)</span><br><span class="line">    at Object.exports.compile (/Users/lanvnal/Files/blog/node_modules/ejs/lib/ejs.js:242:14)</span><br><span class="line">    at Function.ejsRenderer.compile (/Users/lanvnal/Files/blog/node_modules/hexo-renderer-ejs/lib/renderer.js:11:14)</span><br><span class="line">    at Theme._View.View.View._precompile (/Users/lanvnal/Files/blog/node_modules/hexo/lib/theme/view.js:117:31)</span><br></pre></td></tr></table></figure>
-
-<p>决定升级hexo版本，但是没找到很明确的升级hexo的文章，遂做一下记录。</p>
-<h2 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h2><p>1、全局升级hexo-cli，先<code>hexo version</code>查看当前版本，然后<code>npm i hexo-cli -g</code>，再次<code>hexo version</code>查看是否升级成功。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-cli -g</span><br><span class="line">npm update</span><br><span class="line">hexo version</span><br></pre></td></tr></table></figure>
-
-
-
-<p>2、使用<code>npm install -g npm-check</code>和<code>npm-check</code>，检查系统中的插件是否有升级的，可以看到自己前面都安装了那些插件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g npm-check</span><br><span class="line">npm-check</span><br></pre></td></tr></table></figure>
-
-
-
-<p>3、使用<code>npm install -g npm-upgrade</code>和<code>npm-upgrade</code>，升级系统中的插件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g npm-upgrade</span><br><span class="line">npm-upgrade</span><br></pre></td></tr></table></figure>
-
-<p>4、使用<code>npm update -g</code>和<code>npm update --save</code></p>
-<p>更新全局包与更新生产环境依赖包</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm update &lt;name&gt; -g</span><br><span class="line"></span><br><span class="line">npm update &lt;name&gt; --save</span><br></pre></td></tr></table></figure>
-
-<p>save参数：<code>npm install X –save</code>:</p>
-<ul>
-<li><p>会把X包安装到<code>node_modules</code>目录中</p>
-</li>
-<li><p>会在<code>package.json</code>的dependencies属性下添加X</p>
-</li>
-<li><p>之后运行<code>npm install</code>命令时，会自动安装X到node_modules目录中</p>
-</li>
-</ul>
-<p>如果不加save参数的话，之后把X包安装到node_modules目录中，不会添加到dependencies文件中。再查看hexo文件夹下面的dependencies文件,可以看到hexo的版本已经更新了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;hexo-site&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;0.0.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;private&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="string">&quot;hexo&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;version&quot;</span>: <span class="string">&quot;3.7.1&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;dependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;hexo&quot;</span>: <span class="string">&quot;^3.7.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-deployer-git&quot;</span>: <span class="string">&quot;^0.3.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-fs&quot;</span>: <span class="string">&quot;^0.2.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-generator-archive&quot;</span>: <span class="string">&quot;^0.1.5&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-generator-category&quot;</span>: <span class="string">&quot;^0.1.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-generator-index&quot;</span>: <span class="string">&quot;^0.2.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-generator-tag&quot;</span>: <span class="string">&quot;^0.2.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-renderer-ejs&quot;</span>: <span class="string">&quot;^0.3.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-renderer-marked&quot;</span>: <span class="string">&quot;^0.3.2&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-renderer-stylus&quot;</span>: <span class="string">&quot;^0.3.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-server&quot;</span>: <span class="string">&quot;^0.3.2&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>PS：第四步遇到了错误，错误提示如下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">fsevents@1.2.11 install /Users/lanvnal/Files/blog/node_modules/hexo/node_modules/fsevents</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">node-gyp rebuild</span></span><br><span class="line"></span><br><span class="line">xcode-select: error: tool &#x27;xcodebuild&#x27; requires Xcode, but active developer directory &#x27;/Library/Developer/CommandLineTools&#x27; is a command line tools instance</span><br><span class="line"></span><br><span class="line">xcode-select: error: tool &#x27;xcodebuild&#x27; requires Xcode, but active developer directory &#x27;/Library/Developer/CommandLineTools&#x27; is a command line tools instance</span><br><span class="line"></span><br><span class="line">No receipt for &#x27;com.apple.pkg.CLTools_Executables&#x27; found at &#x27;/&#x27;.</span><br><span class="line"></span><br><span class="line">No receipt for &#x27;com.apple.pkg.DeveloperToolsCLILeo&#x27; found at &#x27;/&#x27;.</span><br><span class="line"></span><br><span class="line">No receipt for &#x27;com.apple.pkg.DeveloperToolsCLI&#x27; found at &#x27;/&#x27;.</span><br><span class="line">gyp: No Xcode or CLT version detected!</span><br></pre></td></tr></table></figure>
-
-<p>其实已经安装过了xcode cli，但是这里还是报错了，估计和苹果新系统有关，重装就好了，操作如下：</p>
-<p>如果像以前一样执行<code>xcode-select --install</code>会有如下报错：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xcode-select: error: <span class="built_in">command</span> line tools are already installed, use <span class="string">&quot;Software Update&quot;</span> to install updates</span><br></pre></td></tr></table></figure>
-
-<p>解决办法：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /Library/Developer/CommandLineTools</span><br><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
-
-<p>然后再执行第四步，完美升级。</p>
-]]></content>
-      <categories>
-        <category>网站优化</category>
-      </categories>
-      <tags>
-        <tag>npm</tag>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用操作系统镜像下载</title>
     <url>/posts/ios.html</url>
     <content><![CDATA[<p>目前最常见的操作系统镜像下载地址，包含 Windows、OpenEuler、RHEL、Kylin、UOS等桌面及服务器版操作系统。</p>
@@ -1910,6 +1852,113 @@
       </tags>
   </entry>
   <entry>
+    <title>Hexo版本升级指南</title>
+    <url>/posts/15ac.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>更换了新主题，在hexo g和hexo s的时候总会报如下错误，在主题github issues逛了一圈后，感觉应该是我的hexo版本太老了。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">➜ hexo s</span><br><span class="line">(node:64285) [DEP0061] DeprecationWarning: fs.SyncWriteStream is deprecated.</span><br><span class="line">INFO  Start processing</span><br><span class="line">ERROR Process failed: layout/archive.ejs</span><br><span class="line">SyntaxError: Invalid or unexpected token in &quot;/Users/lanvnal/Files/blog/themes/hexo-theme-matery/layout/archive.ejs&quot;</span><br><span class="line">    at new Function (&lt;anonymous&gt;)</span><br><span class="line">    at Object.exports.compile (/Users/lanvnal/Files/blog/node_modules/ejs/lib/ejs.js:242:14)</span><br><span class="line">    at Function.ejsRenderer.compile (/Users/lanvnal/Files/blog/node_modules/hexo-renderer-ejs/lib/renderer.js:11:14)</span><br><span class="line">    at Theme._View.View.View._precompile (/Users/lanvnal/Files/blog/node_modules/hexo/lib/theme/view.js:117:31)</span><br></pre></td></tr></table></figure>
+
+<p>决定升级hexo版本，但是没找到很明确的升级hexo的文章，遂做一下记录。</p>
+<h2 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h2><p>1、全局升级hexo-cli，先<code>hexo version</code>查看当前版本，然后<code>npm i hexo-cli -g</code>，再次<code>hexo version</code>查看是否升级成功。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-cli -g</span><br><span class="line">npm update</span><br><span class="line">hexo version</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2、使用<code>npm install -g npm-check</code>和<code>npm-check</code>，检查系统中的插件是否有升级的，可以看到自己前面都安装了那些插件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g npm-check</span><br><span class="line">npm-check</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3、使用<code>npm install -g npm-upgrade</code>和<code>npm-upgrade</code>，升级系统中的插件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g npm-upgrade</span><br><span class="line">npm-upgrade</span><br></pre></td></tr></table></figure>
+
+<p>4、使用<code>npm update -g</code>和<code>npm update --save</code></p>
+<p>更新全局包与更新生产环境依赖包</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm update &lt;name&gt; -g</span><br><span class="line"></span><br><span class="line">npm update &lt;name&gt; --save</span><br></pre></td></tr></table></figure>
+
+<p>save参数：<code>npm install X –save</code>:</p>
+<ul>
+<li><p>会把X包安装到<code>node_modules</code>目录中</p>
+</li>
+<li><p>会在<code>package.json</code>的dependencies属性下添加X</p>
+</li>
+<li><p>之后运行<code>npm install</code>命令时，会自动安装X到node_modules目录中</p>
+</li>
+</ul>
+<p>如果不加save参数的话，之后把X包安装到node_modules目录中，不会添加到dependencies文件中。再查看hexo文件夹下面的dependencies文件,可以看到hexo的版本已经更新了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;hexo-site&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;0.0.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;private&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="string">&quot;hexo&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;version&quot;</span>: <span class="string">&quot;3.7.1&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;dependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;hexo&quot;</span>: <span class="string">&quot;^3.7.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-deployer-git&quot;</span>: <span class="string">&quot;^0.3.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-fs&quot;</span>: <span class="string">&quot;^0.2.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-generator-archive&quot;</span>: <span class="string">&quot;^0.1.5&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-generator-category&quot;</span>: <span class="string">&quot;^0.1.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-generator-index&quot;</span>: <span class="string">&quot;^0.2.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-generator-tag&quot;</span>: <span class="string">&quot;^0.2.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-renderer-ejs&quot;</span>: <span class="string">&quot;^0.3.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-renderer-marked&quot;</span>: <span class="string">&quot;^0.3.2&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-renderer-stylus&quot;</span>: <span class="string">&quot;^0.3.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;hexo-server&quot;</span>: <span class="string">&quot;^0.3.2&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>PS：第四步遇到了错误，错误提示如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">fsevents@1.2.11 install /Users/lanvnal/Files/blog/node_modules/hexo/node_modules/fsevents</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">node-gyp rebuild</span></span><br><span class="line"></span><br><span class="line">xcode-select: error: tool &#x27;xcodebuild&#x27; requires Xcode, but active developer directory &#x27;/Library/Developer/CommandLineTools&#x27; is a command line tools instance</span><br><span class="line"></span><br><span class="line">xcode-select: error: tool &#x27;xcodebuild&#x27; requires Xcode, but active developer directory &#x27;/Library/Developer/CommandLineTools&#x27; is a command line tools instance</span><br><span class="line"></span><br><span class="line">No receipt for &#x27;com.apple.pkg.CLTools_Executables&#x27; found at &#x27;/&#x27;.</span><br><span class="line"></span><br><span class="line">No receipt for &#x27;com.apple.pkg.DeveloperToolsCLILeo&#x27; found at &#x27;/&#x27;.</span><br><span class="line"></span><br><span class="line">No receipt for &#x27;com.apple.pkg.DeveloperToolsCLI&#x27; found at &#x27;/&#x27;.</span><br><span class="line">gyp: No Xcode or CLT version detected!</span><br></pre></td></tr></table></figure>
+
+<p>其实已经安装过了xcode cli，但是这里还是报错了，估计和苹果新系统有关，重装就好了，操作如下：</p>
+<p>如果像以前一样执行<code>xcode-select --install</code>会有如下报错：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xcode-select: error: <span class="built_in">command</span> line tools are already installed, use <span class="string">&quot;Software Update&quot;</span> to install updates</span><br></pre></td></tr></table></figure>
+
+<p>解决办法：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /Library/Developer/CommandLineTools</span><br><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
+
+<p>然后再执行第四步，完美升级。</p>
+]]></content>
+      <categories>
+        <category>网站优化</category>
+      </categories>
+      <tags>
+        <tag>npm</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux系统安装之后，如何调节CPU性能策略</title>
+    <url>/posts/6308523a.html</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li><p>1、ondemand：系统默认的超频模式，按需调节，内核提供的功能，不是很强大，但有效实现了动态频率调节，平时以低速方式运行，当系统负载提高时候自动提高频率。以这种模式运行不会因为降频造成性能降低，同时也能节约电能和降低温度。一般官方内核，还有CM7的默认的方式都是ondemand。<br>流畅度： 一般，流畅</p>
+</li>
+<li><p>2、interactive：交互模式，直接上最高频率，然后看CPU负荷慢慢降低，比较耗电。<br>流畅度： 最高，极流畅<br>Interactive 是以 CPU 排程数量而调整频率，从而实现省电。<br>InteractiveX 是以 CPU 负载来调整 CPU 频率，不会过度把频率调低。所以比 Interactive 反应好些，但是省电的效果一般</p>
+</li>
+<li><p>3、conservative：保守模式，类似于ondemand，但调整相对较缓，想省电就用他吧。Google官方内核，kang内核默认模式。<br>流畅度： 高，流畅</p>
+</li>
+<li><p>4、smartass：聪明模式，是I和C模式的升级，该模式在比i模式不差的响应的前提下会做到了更加省电<br>流畅度： 最高，流畅</p>
+</li>
+<li><p>5、performance：性能模式！只有最高频率，从来不考虑消耗的电量，性能没得说，但是耗电量…<br>流畅度：还需要说么？还有比这种模式更流畅的吗？</p>
+</li>
+<li><p>6、powersave 省电模式，通常以最低频率运行，打不死我也不用。<br>流畅度： 极低</p>
+</li>
+<li><p>7、userspace：用户自定义模式，系统将变频策略的决策权交给了用户态应用程序，并提供了相应的接口供用户态应用程序调节CPU 运行频率使用。也就是长期以来都在用的那个模式。可以通过手动编辑配置文件进行配置<br>流畅度：根据设置而定</p>
+</li>
+<li><p>8、Hotplug：类似于ondemand, 但是cpu会在关屏下尝试关掉一个cpu，并且带有deep sleep，比较省电。<br>流畅度：一般，流畅</p>
+</li>
+</ul>
+<h2 id="Linux下设置相关参数"><a href="#Linux下设置相关参数" class="headerlink" title="Linux下设置相关参数"></a>Linux下设置相关参数</h2><h3 id="设置performance模式"><a href="#设置performance模式" class="headerlink" title="设置performance模式"></a>设置performance模式</h3><h4 id="CentOS7下配置"><a href="#CentOS7下配置" class="headerlink" title="CentOS7下配置"></a>CentOS7下配置</h4><p>首先，需要知道Linux有一个叫做cpupower的工具集，用来检查和调整处理器的能耗相关的一些features。其中的一个工具叫做“frequency-set”，可以用来调整cpu运行频率。</p>
+<p>使用下面的命令来查看当下可用的drivers，即governors:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cpupower frequency-info --governors</span><br><span class="line"></span><br><span class="line"><span class="comment"># cpupower -c all frequency-info --governors</span></span><br><span class="line">analyzing CPU 0:</span><br><span class="line">   available cpufreq governors: performance powersave</span><br><span class="line"></span><br><span class="line">analyzing CPU 1:</span><br><span class="line">   available cpufreq governors: performance powersave</span><br></pre></td></tr></table></figure>
+
+<p>光手动的用<code>cpupower –c all frequency-set –g performance</code> 来修改是不够的，我们需要让这个配置在开机的时候就生效。所以，需要创建一个由systemd管理的服务，让这个服务在开机的时候就自动运行。</p>
+<p>运行下面的命令，直接修改<code>/etc/systemd/system/cpupower.service</code>这个文件，使得这个服务开机就运行一次（oneshot）, 不始终保持运行。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> &lt;&lt; <span class="string">EOF | sudo tee /etc/systemd/system/cpupower.service</span></span><br><span class="line"><span class="string">[Unit]</span></span><br><span class="line"><span class="string">Description=CPU powersave</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Service]</span></span><br><span class="line"><span class="string">Type=oneshot</span></span><br><span class="line"><span class="string">ExecStart=/usr/bin/cpupower -c all frequency-set -g powersave</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Install]</span></span><br><span class="line"><span class="string">WantedBy=multi-user.target</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>问题解决。</p>
+<h4 id="其它办法"><a href="#其它办法" class="headerlink" title="其它办法"></a>其它办法</h4><p>方法一：在bios(cpu 选项，或者电源管理选项)直接配置为max performance（我的系统无法设置），重启即可；</p>
+<p>方法二：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install cpupowerutils</span><br><span class="line">cpupower -c all frequency-set -g performance  <span class="comment">#（不用安装，自带cpupower 命令）</span></span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line">cpupower frequency-set -g performance</span><br></pre></td></tr></table></figure>
+
+<p>方法三：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">service cpuspeed stop</span><br></pre></td></tr></table></figure>
+
+<p>这里按需重启系统，最好试一下重启能不能生效，有的服务器会在重启之后失效，必须在bios里面设置</p>
+<h3 id="查看当前governor"><a href="#查看当前governor" class="headerlink" title="查看当前governor"></a>查看当前governor</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor</span><br><span class="line"><span class="comment">#powersave或者performance</span></span><br><span class="line"><span class="built_in">cat</span> /proc/cpuinfo | grep -i <span class="string">&quot;cpu mhz&quot;</span></span><br><span class="line"><span class="comment">#显示每个CPU的当前运行频率</span></span><br><span class="line">cpupower frequency-info</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Linux</tag>
+        <tag>CPU</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>kms激活命令：一句命令激活Windows/Office</title>
     <url>/posts/kms.html</url>
     <content><![CDATA[<p>对于新安装 Windows的用户而言，总是会对自己的激活状态感到惴惴不安，到底激活没？其实很简单，四种命令可以帮助您充分了解自己机器的激活状态</p>
@@ -2023,55 +2072,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux系统安装之后，如何调节CPU性能策略</title>
-    <url>/posts/6308523a.html</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
-<li><p>1、ondemand：系统默认的超频模式，按需调节，内核提供的功能，不是很强大，但有效实现了动态频率调节，平时以低速方式运行，当系统负载提高时候自动提高频率。以这种模式运行不会因为降频造成性能降低，同时也能节约电能和降低温度。一般官方内核，还有CM7的默认的方式都是ondemand。<br>流畅度： 一般，流畅</p>
-</li>
-<li><p>2、interactive：交互模式，直接上最高频率，然后看CPU负荷慢慢降低，比较耗电。<br>流畅度： 最高，极流畅<br>Interactive 是以 CPU 排程数量而调整频率，从而实现省电。<br>InteractiveX 是以 CPU 负载来调整 CPU 频率，不会过度把频率调低。所以比 Interactive 反应好些，但是省电的效果一般</p>
-</li>
-<li><p>3、conservative：保守模式，类似于ondemand，但调整相对较缓，想省电就用他吧。Google官方内核，kang内核默认模式。<br>流畅度： 高，流畅</p>
-</li>
-<li><p>4、smartass：聪明模式，是I和C模式的升级，该模式在比i模式不差的响应的前提下会做到了更加省电<br>流畅度： 最高，流畅</p>
-</li>
-<li><p>5、performance：性能模式！只有最高频率，从来不考虑消耗的电量，性能没得说，但是耗电量…<br>流畅度：还需要说么？还有比这种模式更流畅的吗？</p>
-</li>
-<li><p>6、powersave 省电模式，通常以最低频率运行，打不死我也不用。<br>流畅度： 极低</p>
-</li>
-<li><p>7、userspace：用户自定义模式，系统将变频策略的决策权交给了用户态应用程序，并提供了相应的接口供用户态应用程序调节CPU 运行频率使用。也就是长期以来都在用的那个模式。可以通过手动编辑配置文件进行配置<br>流畅度：根据设置而定</p>
-</li>
-<li><p>8、Hotplug：类似于ondemand, 但是cpu会在关屏下尝试关掉一个cpu，并且带有deep sleep，比较省电。<br>流畅度：一般，流畅</p>
-</li>
-</ul>
-<h2 id="Linux下设置相关参数"><a href="#Linux下设置相关参数" class="headerlink" title="Linux下设置相关参数"></a>Linux下设置相关参数</h2><h3 id="设置performance模式"><a href="#设置performance模式" class="headerlink" title="设置performance模式"></a>设置performance模式</h3><h4 id="CentOS7下配置"><a href="#CentOS7下配置" class="headerlink" title="CentOS7下配置"></a>CentOS7下配置</h4><p>首先，需要知道Linux有一个叫做cpupower的工具集，用来检查和调整处理器的能耗相关的一些features。其中的一个工具叫做“frequency-set”，可以用来调整cpu运行频率。</p>
-<p>使用下面的命令来查看当下可用的drivers，即governors:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cpupower frequency-info --governors</span><br><span class="line"></span><br><span class="line"><span class="comment"># cpupower -c all frequency-info --governors</span></span><br><span class="line">analyzing CPU 0:</span><br><span class="line">   available cpufreq governors: performance powersave</span><br><span class="line"></span><br><span class="line">analyzing CPU 1:</span><br><span class="line">   available cpufreq governors: performance powersave</span><br></pre></td></tr></table></figure>
-
-<p>光手动的用<code>cpupower –c all frequency-set –g performance</code> 来修改是不够的，我们需要让这个配置在开机的时候就生效。所以，需要创建一个由systemd管理的服务，让这个服务在开机的时候就自动运行。</p>
-<p>运行下面的命令，直接修改<code>/etc/systemd/system/cpupower.service</code>这个文件，使得这个服务开机就运行一次（oneshot）, 不始终保持运行。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> &lt;&lt; <span class="string">EOF | sudo tee /etc/systemd/system/cpupower.service</span></span><br><span class="line"><span class="string">[Unit]</span></span><br><span class="line"><span class="string">Description=CPU powersave</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Service]</span></span><br><span class="line"><span class="string">Type=oneshot</span></span><br><span class="line"><span class="string">ExecStart=/usr/bin/cpupower -c all frequency-set -g powersave</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[Install]</span></span><br><span class="line"><span class="string">WantedBy=multi-user.target</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>问题解决。</p>
-<h4 id="其它办法"><a href="#其它办法" class="headerlink" title="其它办法"></a>其它办法</h4><p>方法一：在bios(cpu 选项，或者电源管理选项)直接配置为max performance（我的系统无法设置），重启即可；</p>
-<p>方法二：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install cpupowerutils</span><br><span class="line">cpupower -c all frequency-set -g performance  <span class="comment">#（不用安装，自带cpupower 命令）</span></span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line">cpupower frequency-set -g performance</span><br></pre></td></tr></table></figure>
-
-<p>方法三：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">service cpuspeed stop</span><br></pre></td></tr></table></figure>
-
-<p>这里按需重启系统，最好试一下重启能不能生效，有的服务器会在重启之后失效，必须在bios里面设置</p>
-<h3 id="查看当前governor"><a href="#查看当前governor" class="headerlink" title="查看当前governor"></a>查看当前governor</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor</span><br><span class="line"><span class="comment">#powersave或者performance</span></span><br><span class="line"><span class="built_in">cat</span> /proc/cpuinfo | grep -i <span class="string">&quot;cpu mhz&quot;</span></span><br><span class="line"><span class="comment">#显示每个CPU的当前运行频率</span></span><br><span class="line">cpupower frequency-info</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>Linux</tag>
-        <tag>CPU</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux安全加固措施方案之密码加固</title>
     <url>/posts/d931.html</url>
     <content><![CDATA[<h2 id="0x01-准备工作："><a href="#0x01-准备工作：" class="headerlink" title="0x01 准备工作："></a>0x01 准备工作：</h2><p>安装 PAM 的bai cracklib 模块，cracklib 能提供额外的密码du检查能力。</p>
@@ -2145,6 +2145,48 @@
         <tag>Linux</tag>
         <tag>Ubuntu</tag>
         <tag>主机加固</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux磁盘分区并挂载</title>
+    <url>/posts/76b2.html</url>
+    <content><![CDATA[<h2 id="0x01-查看系统磁盘"><a href="#0x01-查看系统磁盘" class="headerlink" title="0x01 查看系统磁盘"></a>0x01 查看系统磁盘</h2><p>使用<code>lsblk</code>可查看分区情况与磁盘大小，使用 <code>df -h</code> 命令，可以看到系统的磁盘使用情况，</p>
+<p>如需要挂载 <code>/dev/sdb</code> 此存储到 <code>/data</code> 目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">##查看设备中磁盘</span></span><br><span class="line">lsblk</span><br><span class="line"><span class="comment">##查看磁盘挂载与使用情况</span></span><br><span class="line"><span class="built_in">df</span> -Th</span><br><span class="line">Filesystem     Type      Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs       devtmpfs  3.9G     0  3.9G   0% /dev</span><br><span class="line">tmpfs          tmpfs     3.9G     0  3.9G   0% /dev/shm</span><br><span class="line">tmpfs          tmpfs     3.9G  8.6M  3.9G   1% /run</span><br><span class="line">tmpfs          tmpfs     3.9G     0  3.9G   0% /sys/fs/cgroup</span><br><span class="line">/dev/vda2      xfs        92G  3.2G   89G   4% /</span><br><span class="line">tmpfs          tmpfs     783M     0  783M   0% /run/user/0</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x02-Linux-磁盘分区"><a href="#0x02-Linux-磁盘分区" class="headerlink" title="0x02 Linux 磁盘分区"></a>0x02 Linux 磁盘分区</h2><h3 id="标准分区挂载"><a href="#标准分区挂载" class="headerlink" title="标准分区挂载"></a>标准分区挂载</h3><h4 id="fdisk-分区工具"><a href="#fdisk-分区工具" class="headerlink" title="fdisk 分区工具"></a>fdisk 分区工具</h4><p>磁盘少于2T时可以使用<code>fdisk</code>分区，大于2T需要使用 <code>gdisk</code>工具</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 刷新硬件信息</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">## 查看磁盘情况</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># lsblk</span></span><br><span class="line"><span class="comment">##新建分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># fdisk /dev/vda</span></span><br><span class="line">Welcome to fdisk (util-linux 2.23.2).</span><br><span class="line"><span class="comment">##创建分区</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): n</span><br><span class="line">Partition <span class="built_in">type</span>:</span><br><span class="line">   p   primary (1 primary, 0 extended, 3 free)</span><br><span class="line">   e   extended</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (2-4, default 2): 2</span><br><span class="line">First sector (16779264-209715199, default 16779264):</span><br><span class="line">Using default value 16779264</span><br><span class="line">Last sector, +sectors or +size&#123;K,M,G&#125; (16779264-209715199, default 209715199):</span><br><span class="line">Using default value 209715199</span><br><span class="line">Partition 2 of <span class="built_in">type</span> Linux and of size 92 GiB is <span class="built_in">set</span></span><br><span class="line"><span class="comment">## 再次查看分区</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line"></span><br><span class="line">Disk /dev/vda: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x000504a5</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/vda1            2048    16779263     8388608   82  Linux swap / Solaris</span><br><span class="line">/dev/vda2        16779264   209715199    96467968   83  Linux</span><br><span class="line"><span class="comment">## 检查分区是不否有错误</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): v</span><br><span class="line">Remaining 2047 unallocated 512-byte sectors</span><br><span class="line"><span class="comment">## 保存分区信息</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): w</span><br><span class="line">The partition table has been altered!</span><br><span class="line"></span><br><span class="line">Calling ioctl() to re-read partition table.</span><br><span class="line"><span class="comment">## 刷新存储文件，centos6 使用 kpartx /dev/vda</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##格式化分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mkfs.xfs /dev/vda2</span></span><br><span class="line"><span class="comment">##修改fstab并挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vim /etc/fstab</span></span><br><span class="line">/dev/vda2    /data   xfs     defaults   0 0</span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mount -a</span></span><br><span class="line"><span class="comment">##查看分区挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># df -Th</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="gdisk-分区工具"><a href="#gdisk-分区工具" class="headerlink" title="gdisk 分区工具"></a>gdisk 分区工具</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">##安装gdisk包</span></span><br><span class="line">yum install gdisk</span><br><span class="line"><span class="comment">##刷新存储</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##创建分区</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># gdisk /dev/vda</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): n</span><br><span class="line">Partition number (3-128, default 3): </span><br><span class="line"><span class="comment">#查看分区情况</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line">Number  Start (sector)    End (sector)  Size       Code  Name</span><br><span class="line">   1            2048         1026047   500.0 MiB   EF00  EFI System Partition</span><br><span class="line">   2         1026048         1640447   300.0 MiB   0700</span><br><span class="line">   3         1640448       104857566   49.2 GiB    8300  Linux filesystem</span><br><span class="line"><span class="comment">#修改分区类型</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): t</span><br><span class="line">Partition number (1-3): 3</span><br><span class="line">Hex code or GUID (L to show codes, Enter = 8300): 0700</span><br><span class="line"><span class="comment">#检查分区情况</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): v</span><br><span class="line"><span class="comment">#保存分区</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): w</span><br><span class="line"></span><br><span class="line">Do you want to proceed? (Y/N): y</span><br><span class="line"><span class="comment">#写入分区信息</span></span><br><span class="line"><span class="comment">##刷新存储</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##格式化分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mkfs.xfs /dev/vda2</span></span><br><span class="line"><span class="comment">##修改fstab并挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vim /etc/fstab</span></span><br><span class="line">/dev/vda2    /data   xfs     defaults   0 0</span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mount -a</span></span><br><span class="line"><span class="comment">##查看分区挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># df -Th</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="parted-分区工具"><a href="#parted-分区工具" class="headerlink" title="parted 分区工具"></a>parted 分区工具</h4><p>linux操作系统下有fdisk和parted两个分区工具，超过2T的磁盘只能使用parted进行分区，fdisk和parted分区方法也有很大的不同</p>
+<p>使用<code>parted</code>分区工具需要注意磁盘数据，运行命令就已经开始执行分区操作</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">####刷新存储</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##创建分区</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># parted  /dev/sdb</span></span><br><span class="line"><span class="comment">##转换磁盘为gpt</span></span><br><span class="line">(parted)mklable gpt</span><br><span class="line"><span class="comment">##创建分区,0为开始分区大小，2T为结束分区大小</span></span><br><span class="line">(parted)mkpart primary 0 2T</span><br><span class="line">(parted)p</span><br><span class="line">(parted)q</span><br><span class="line"><span class="comment">##刷新存储</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##格式化分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mkfs.xfs /dev/vda2</span></span><br><span class="line"><span class="comment">##修改fstab并挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vim /etc/fstab</span></span><br><span class="line">/dev/vda2    /data   xfs     defaults   0 0</span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mount -a</span></span><br><span class="line"><span class="comment">##查看分区挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># df -Th</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="LVM分区挂载"><a href="#LVM分区挂载" class="headerlink" title="LVM分区挂载"></a>LVM分区挂载</h3><p>由于传统的磁盘管理不能对磁盘进行磁盘管理，因此诞生了LVM技术，LVM技术最大的特点就是对磁盘进行动态管理。由于LVM的逻辑卷的大小更改可以进行动态调整，且不会出现丢失数据的情况。</p>
+<p>LVM（Logic Volume Manager）是逻辑卷管理的简称。它是Linux环境下对磁盘分区管理的一种机制。对于其他的的UNIX（AIX&#x2F;HP&#x2F;SUM)操作系统，以及Windows系统也有类似的磁盘管理软件。</p>
+<p>LVM管理的方式非常简单，就是通过将底层的物料磁盘抽象并封装起来，然后以逻辑的方式呈现给上层应用。</p>
+<p>首先需要对磁盘分区，再把一个或多个磁盘分区加入pv</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 刷新硬件信息</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">## 查看磁盘情况</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># lsblk</span></span><br><span class="line"><span class="comment">##新建分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># fdisk /dev/vda</span></span><br><span class="line">Welcome to fdisk (util-linux 2.23.2).</span><br><span class="line"><span class="comment">##创建分区</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): n</span><br><span class="line">Partition <span class="built_in">type</span>:</span><br><span class="line">   p   primary (1 primary, 0 extended, 3 free)</span><br><span class="line">   e   extended</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (2-4, default 2): 2</span><br><span class="line">First sector (16779264-209715199, default 16779264):</span><br><span class="line">Using default value 16779264</span><br><span class="line">Last sector, +sectors or +size&#123;K,M,G&#125; (16779264-209715199, default 209715199):</span><br><span class="line">Using default value 209715199</span><br><span class="line">Partition 2 of <span class="built_in">type</span> Linux and of size 92 GiB is <span class="built_in">set</span></span><br><span class="line"><span class="comment">## 再次查看分区</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line"></span><br><span class="line">Disk /dev/vda: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x000504a5</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/vda1            2048    16779263     8388608   82  Linux swap / Solaris</span><br><span class="line">/dev/vda2        16779264   209715199    96467968   83  Linux</span><br><span class="line"><span class="comment">## 检查分区是不否有错误</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): v</span><br><span class="line">Remaining 2047 unallocated 512-byte sectors</span><br><span class="line"><span class="comment">## 保存分区信息</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): w</span><br><span class="line">The partition table has been altered!</span><br><span class="line"></span><br><span class="line">Calling ioctl() to re-read partition table.</span><br><span class="line"><span class="comment">## 刷新存储文件，centos6 使用 kpartx /dev/vda</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##创建pv卷</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># pvcreate /dev/vda2</span></span><br><span class="line"><span class="comment">##创建vg卷组</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vgcreate data /dev/vda2</span></span><br><span class="line"><span class="comment">##创建lv逻辑卷</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># lvcreate -l 100%FREE -n data data</span></span><br><span class="line"><span class="comment">##格式化逻辑卷</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mkfs.xfs /dev/mapper/data-data</span></span><br><span class="line"><span class="comment">##修改fstab并挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vim /etc/fstab</span></span><br><span class="line">/dev/mapper/data-data    /data   xfs     defaults   0 0</span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mount -a</span></span><br><span class="line"><span class="comment">##查看分区挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># df -Th</span></span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<p><strong>相关链接</strong></p>
+<ul>
+<li><a href="https://baize.cc/posts/fa9f.html">Linux存储扩容，分区扩容</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -2265,48 +2307,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux磁盘分区并挂载</title>
-    <url>/posts/76b2.html</url>
-    <content><![CDATA[<h2 id="0x01-查看系统磁盘"><a href="#0x01-查看系统磁盘" class="headerlink" title="0x01 查看系统磁盘"></a>0x01 查看系统磁盘</h2><p>使用<code>lsblk</code>可查看分区情况与磁盘大小，使用 <code>df -h</code> 命令，可以看到系统的磁盘使用情况，</p>
-<p>如需要挂载 <code>/dev/sdb</code> 此存储到 <code>/data</code> 目录</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">##查看设备中磁盘</span></span><br><span class="line">lsblk</span><br><span class="line"><span class="comment">##查看磁盘挂载与使用情况</span></span><br><span class="line"><span class="built_in">df</span> -Th</span><br><span class="line">Filesystem     Type      Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs       devtmpfs  3.9G     0  3.9G   0% /dev</span><br><span class="line">tmpfs          tmpfs     3.9G     0  3.9G   0% /dev/shm</span><br><span class="line">tmpfs          tmpfs     3.9G  8.6M  3.9G   1% /run</span><br><span class="line">tmpfs          tmpfs     3.9G     0  3.9G   0% /sys/fs/cgroup</span><br><span class="line">/dev/vda2      xfs        92G  3.2G   89G   4% /</span><br><span class="line">tmpfs          tmpfs     783M     0  783M   0% /run/user/0</span><br></pre></td></tr></table></figure>
-
-<h2 id="0x02-Linux-磁盘分区"><a href="#0x02-Linux-磁盘分区" class="headerlink" title="0x02 Linux 磁盘分区"></a>0x02 Linux 磁盘分区</h2><h3 id="标准分区挂载"><a href="#标准分区挂载" class="headerlink" title="标准分区挂载"></a>标准分区挂载</h3><h4 id="fdisk-分区工具"><a href="#fdisk-分区工具" class="headerlink" title="fdisk 分区工具"></a>fdisk 分区工具</h4><p>磁盘少于2T时可以使用<code>fdisk</code>分区，大于2T需要使用 <code>gdisk</code>工具</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 刷新硬件信息</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">## 查看磁盘情况</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># lsblk</span></span><br><span class="line"><span class="comment">##新建分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># fdisk /dev/vda</span></span><br><span class="line">Welcome to fdisk (util-linux 2.23.2).</span><br><span class="line"><span class="comment">##创建分区</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): n</span><br><span class="line">Partition <span class="built_in">type</span>:</span><br><span class="line">   p   primary (1 primary, 0 extended, 3 free)</span><br><span class="line">   e   extended</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (2-4, default 2): 2</span><br><span class="line">First sector (16779264-209715199, default 16779264):</span><br><span class="line">Using default value 16779264</span><br><span class="line">Last sector, +sectors or +size&#123;K,M,G&#125; (16779264-209715199, default 209715199):</span><br><span class="line">Using default value 209715199</span><br><span class="line">Partition 2 of <span class="built_in">type</span> Linux and of size 92 GiB is <span class="built_in">set</span></span><br><span class="line"><span class="comment">## 再次查看分区</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line"></span><br><span class="line">Disk /dev/vda: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x000504a5</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/vda1            2048    16779263     8388608   82  Linux swap / Solaris</span><br><span class="line">/dev/vda2        16779264   209715199    96467968   83  Linux</span><br><span class="line"><span class="comment">## 检查分区是不否有错误</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): v</span><br><span class="line">Remaining 2047 unallocated 512-byte sectors</span><br><span class="line"><span class="comment">## 保存分区信息</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): w</span><br><span class="line">The partition table has been altered!</span><br><span class="line"></span><br><span class="line">Calling ioctl() to re-read partition table.</span><br><span class="line"><span class="comment">## 刷新存储文件，centos6 使用 kpartx /dev/vda</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##格式化分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mkfs.xfs /dev/vda2</span></span><br><span class="line"><span class="comment">##修改fstab并挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vim /etc/fstab</span></span><br><span class="line">/dev/vda2    /data   xfs     defaults   0 0</span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mount -a</span></span><br><span class="line"><span class="comment">##查看分区挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># df -Th</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="gdisk-分区工具"><a href="#gdisk-分区工具" class="headerlink" title="gdisk 分区工具"></a>gdisk 分区工具</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">##安装gdisk包</span></span><br><span class="line">yum install gdisk</span><br><span class="line"><span class="comment">##刷新存储</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##创建分区</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># gdisk /dev/vda</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): n</span><br><span class="line">Partition number (3-128, default 3): </span><br><span class="line"><span class="comment">#查看分区情况</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line">Number  Start (sector)    End (sector)  Size       Code  Name</span><br><span class="line">   1            2048         1026047   500.0 MiB   EF00  EFI System Partition</span><br><span class="line">   2         1026048         1640447   300.0 MiB   0700</span><br><span class="line">   3         1640448       104857566   49.2 GiB    8300  Linux filesystem</span><br><span class="line"><span class="comment">#修改分区类型</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): t</span><br><span class="line">Partition number (1-3): 3</span><br><span class="line">Hex code or GUID (L to show codes, Enter = 8300): 0700</span><br><span class="line"><span class="comment">#检查分区情况</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): v</span><br><span class="line"><span class="comment">#保存分区</span></span><br><span class="line">Command (? <span class="keyword">for</span> <span class="built_in">help</span>): w</span><br><span class="line"></span><br><span class="line">Do you want to proceed? (Y/N): y</span><br><span class="line"><span class="comment">#写入分区信息</span></span><br><span class="line"><span class="comment">##刷新存储</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##格式化分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mkfs.xfs /dev/vda2</span></span><br><span class="line"><span class="comment">##修改fstab并挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vim /etc/fstab</span></span><br><span class="line">/dev/vda2    /data   xfs     defaults   0 0</span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mount -a</span></span><br><span class="line"><span class="comment">##查看分区挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># df -Th</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="parted-分区工具"><a href="#parted-分区工具" class="headerlink" title="parted 分区工具"></a>parted 分区工具</h4><p>linux操作系统下有fdisk和parted两个分区工具，超过2T的磁盘只能使用parted进行分区，fdisk和parted分区方法也有很大的不同</p>
-<p>使用<code>parted</code>分区工具需要注意磁盘数据，运行命令就已经开始执行分区操作</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">####刷新存储</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##创建分区</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># parted  /dev/sdb</span></span><br><span class="line"><span class="comment">##转换磁盘为gpt</span></span><br><span class="line">(parted)mklable gpt</span><br><span class="line"><span class="comment">##创建分区,0为开始分区大小，2T为结束分区大小</span></span><br><span class="line">(parted)mkpart primary 0 2T</span><br><span class="line">(parted)p</span><br><span class="line">(parted)q</span><br><span class="line"><span class="comment">##刷新存储</span></span><br><span class="line">[root@i-5C222F91 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##格式化分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mkfs.xfs /dev/vda2</span></span><br><span class="line"><span class="comment">##修改fstab并挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vim /etc/fstab</span></span><br><span class="line">/dev/vda2    /data   xfs     defaults   0 0</span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mount -a</span></span><br><span class="line"><span class="comment">##查看分区挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># df -Th</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="LVM分区挂载"><a href="#LVM分区挂载" class="headerlink" title="LVM分区挂载"></a>LVM分区挂载</h3><p>由于传统的磁盘管理不能对磁盘进行磁盘管理，因此诞生了LVM技术，LVM技术最大的特点就是对磁盘进行动态管理。由于LVM的逻辑卷的大小更改可以进行动态调整，且不会出现丢失数据的情况。</p>
-<p>LVM（Logic Volume Manager）是逻辑卷管理的简称。它是Linux环境下对磁盘分区管理的一种机制。对于其他的的UNIX（AIX&#x2F;HP&#x2F;SUM)操作系统，以及Windows系统也有类似的磁盘管理软件。</p>
-<p>LVM管理的方式非常简单，就是通过将底层的物料磁盘抽象并封装起来，然后以逻辑的方式呈现给上层应用。</p>
-<p>首先需要对磁盘分区，再把一个或多个磁盘分区加入pv</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 刷新硬件信息</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">## 查看磁盘情况</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># lsblk</span></span><br><span class="line"><span class="comment">##新建分区</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># fdisk /dev/vda</span></span><br><span class="line">Welcome to fdisk (util-linux 2.23.2).</span><br><span class="line"><span class="comment">##创建分区</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): n</span><br><span class="line">Partition <span class="built_in">type</span>:</span><br><span class="line">   p   primary (1 primary, 0 extended, 3 free)</span><br><span class="line">   e   extended</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (2-4, default 2): 2</span><br><span class="line">First sector (16779264-209715199, default 16779264):</span><br><span class="line">Using default value 16779264</span><br><span class="line">Last sector, +sectors or +size&#123;K,M,G&#125; (16779264-209715199, default 209715199):</span><br><span class="line">Using default value 209715199</span><br><span class="line">Partition 2 of <span class="built_in">type</span> Linux and of size 92 GiB is <span class="built_in">set</span></span><br><span class="line"><span class="comment">## 再次查看分区</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line"></span><br><span class="line">Disk /dev/vda: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x000504a5</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/vda1            2048    16779263     8388608   82  Linux swap / Solaris</span><br><span class="line">/dev/vda2        16779264   209715199    96467968   83  Linux</span><br><span class="line"><span class="comment">## 检查分区是不否有错误</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): v</span><br><span class="line">Remaining 2047 unallocated 512-byte sectors</span><br><span class="line"><span class="comment">## 保存分区信息</span></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): w</span><br><span class="line">The partition table has been altered!</span><br><span class="line"></span><br><span class="line">Calling ioctl() to re-read partition table.</span><br><span class="line"><span class="comment">## 刷新存储文件，centos6 使用 kpartx /dev/vda</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># partprobe</span></span><br><span class="line"><span class="comment">##创建pv卷</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># pvcreate /dev/vda2</span></span><br><span class="line"><span class="comment">##创建vg卷组</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vgcreate data /dev/vda2</span></span><br><span class="line"><span class="comment">##创建lv逻辑卷</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># lvcreate -l 100%FREE -n data data</span></span><br><span class="line"><span class="comment">##格式化逻辑卷</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mkfs.xfs /dev/mapper/data-data</span></span><br><span class="line"><span class="comment">##修改fstab并挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># vim /etc/fstab</span></span><br><span class="line">/dev/mapper/data-data    /data   xfs     defaults   0 0</span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># mount -a</span></span><br><span class="line"><span class="comment">##查看分区挂载</span></span><br><span class="line">[root@i-351D0B02 ~]<span class="comment"># df -Th</span></span><br></pre></td></tr></table></figure>
-
-
-<hr>
-<p><strong>相关链接</strong></p>
-<ul>
-<li><a href="https://baize.cc/posts/fa9f.html">Linux存储扩容，分区扩容</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux find命令</title>
     <url>/posts/4935.html</url>
     <content><![CDATA[<p>Linux find命令用来在指定目录下查找文件。任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则find命令将在当前目录下查找子目录与文件。并且将查找到的子目录和文件全部进行显示。</p>
@@ -2382,22 +2382,6 @@
         <tag>Ubuntu</tag>
         <tag>备份</tag>
         <tag>恢复</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux 查看服务器远程管理IP(DELL iDrac和HP iLO)</title>
-    <url>/posts/7f56.html</url>
-    <content><![CDATA[<h3 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y OpenIPMI ipmitool</span><br><span class="line">[root@localhost ~]<span class="comment"># ipmitool lan print</span></span><br><span class="line">Set <span class="keyword">in</span> Progress         : Set Complete</span><br><span class="line">IP Address Source       : Static Address</span><br><span class="line">IP Address              : 10.1.6.200</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : e4:72:e2:c8:70:a5</span><br><span class="line">SNMP Community String   : TrapAdmin12<span class="comment">#$</span></span><br><span class="line">IP Header               : TTL=0x40 Flags=0x40 Precedence=0x00 TOS=0x10</span><br><span class="line">Default Gateway IP      : 10.1.6.254</span><br></pre></td></tr></table></figure>
-
-<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install ipmitool</span><br><span class="line">[root@localhost ~]<span class="comment"># ipmitool lan print</span></span><br><span class="line">Set <span class="keyword">in</span> Progress         : Set Complete</span><br><span class="line">IP Address Source       : Static Address</span><br><span class="line">IP Address              : 10.1.6.200</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : e4:72:e2:c8:70:a5</span><br><span class="line">SNMP Community String   : TrapAdmin12<span class="comment">#$</span></span><br><span class="line">IP Header               : TTL=0x40 Flags=0x40 Precedence=0x00 TOS=0x10</span><br><span class="line">Default Gateway IP      : 10.1.6.254</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -3017,6 +3001,22 @@
         <tag>Linux</tag>
         <tag>Ubuntu</tag>
         <tag>硬盘分区</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 查看服务器远程管理IP(DELL iDrac和HP iLO)</title>
+    <url>/posts/7f56.html</url>
+    <content><![CDATA[<h3 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y OpenIPMI ipmitool</span><br><span class="line">[root@localhost ~]<span class="comment"># ipmitool lan print</span></span><br><span class="line">Set <span class="keyword">in</span> Progress         : Set Complete</span><br><span class="line">IP Address Source       : Static Address</span><br><span class="line">IP Address              : 10.1.6.200</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : e4:72:e2:c8:70:a5</span><br><span class="line">SNMP Community String   : TrapAdmin12<span class="comment">#$</span></span><br><span class="line">IP Header               : TTL=0x40 Flags=0x40 Precedence=0x00 TOS=0x10</span><br><span class="line">Default Gateway IP      : 10.1.6.254</span><br></pre></td></tr></table></figure>
+
+<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install ipmitool</span><br><span class="line">[root@localhost ~]<span class="comment"># ipmitool lan print</span></span><br><span class="line">Set <span class="keyword">in</span> Progress         : Set Complete</span><br><span class="line">IP Address Source       : Static Address</span><br><span class="line">IP Address              : 10.1.6.200</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : e4:72:e2:c8:70:a5</span><br><span class="line">SNMP Community String   : TrapAdmin12<span class="comment">#$</span></span><br><span class="line">IP Header               : TTL=0x40 Flags=0x40 Precedence=0x00 TOS=0x10</span><br><span class="line">Default Gateway IP      : 10.1.6.254</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
