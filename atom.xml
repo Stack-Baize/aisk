@@ -6,7 +6,7 @@
   <link href="https://aisk.cc/atom.xml" rel="self"/>
   
   <link href="https://aisk.cc/"/>
-  <updated>2023-04-02T12:32:46.050Z</updated>
+  <updated>2024-08-07T01:30:12.655Z</updated>
   <id>https://aisk.cc/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>DockerHub国内镜像源列表</title>
+    <link href="https://aisk.cc/posts/7a80853b.html"/>
+    <id>https://aisk.cc/posts/7a80853b.html</id>
+    <published>2024-08-07T02:00:00.000Z</published>
+    <updated>2024-08-07T01:30:12.655Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x01-DockerHub国内镜像源列表"><a href="#0x01-DockerHub国内镜像源列表" class="headerlink" title="0x01 DockerHub国内镜像源列表"></a>0x01 DockerHub国内镜像源列表</h2><p>此列表只收录无需限定条件的DockerHub镜像源，感谢这些公益服务者。</p><p>2024年6月18日 亲测可用</p><table><thead><tr><th align="left">DockerHub镜像仓库</th><th align="left">镜像加速器地址</th></tr></thead><tbody><tr><td align="left">Docker镜像加速站</td><td align="left"><a href="https://hub.uuuadc.top/">https://hub.uuuadc.top/</a></td></tr><tr><td align="left"></td><td align="left">docker.1panel.live</td></tr><tr><td align="left"></td><td align="left">hub.rat.dev</td></tr><tr><td align="left">DockerHub 镜像加速代理</td><td align="left"><a href="https://docker.anyhub.us.kg/">https://docker.anyhub.us.kg</a></td></tr><tr><td align="left"></td><td align="left"><a href="https://docker.chenby.cn/">https://docker.chenby.cn</a></td></tr><tr><td align="left"></td><td align="left"><a href="https://dockerhub.jobcher.com/">https://dockerhub.jobcher.com/</a></td></tr><tr><td align="left">镜像使用说明</td><td align="left"><a href="https://dockerhub.icu/">https://dockerhub.icu</a></td></tr><tr><td align="left">Docker镜像加速站</td><td align="left"><a href="https://docker.ckyl.me/">https://docker.ckyl.me</a></td></tr><tr><td align="left">镜像使用说明</td><td align="left"><a href="https://docker.awsl9527.cn/">https://docker.awsl9527.cn</a></td></tr><tr><td align="left">镜像使用说明</td><td align="left"><a href="https://docker.hpcloud.cloud/">https://docker.hpcloud.cloud</a></td></tr><tr><td align="left">AtomHub 可信镜像仓库平台（只包含基础镜像，共336个）</td><td align="left"><a href="https://atomhub.openatom.cn/">https://atomhub.openatom.cn</a></td></tr><tr><td align="left">DaoCloud 镜像站</td><td align="left"><a href="https://docker.m.daocloud.io/">https://docker.m.daocloud.io</a></td></tr></tbody></table><h2 id="0x02-使用教程"><a href="#0x02-使用教程" class="headerlink" title="0x02 使用教程"></a>0x02 使用教程</h2><p>为了加速镜像拉取，使用以下命令设置registry mirror</p><blockquote><p>支持系统：Ubuntu 16.04+、Debian 8+、CentOS 7+</p></blockquote><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /etc/docker</span><br><span class="line">sudo <span class="built_in">tee</span> /etc/docker/daemon.json &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    &quot;registry-mirrors&quot;: [</span></span><br><span class="line"><span class="string">        &quot;https://hub.uuuadc.top&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://docker.anyhub.us.kg&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://dockerhub.jobcher.com&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://dockerhub.icu&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://docker.ckyl.me&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://docker.awsl9527.cn&quot;</span></span><br><span class="line"><span class="string">    ]</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>使用DockerHub Proxy，以下以 <code>hub.uuuadc.top</code> 为例：可以根据列表自行替换</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull hub.uuuadc.top/library/mysql:5.7</span><br></pre></td></tr></table></figure><p>说明：library是一个特殊的命名空间，它代表的是官方镜像。如果是某个用户的镜像就把library替换为镜像的用户名</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;0x01-DockerHub国内镜像源列表&quot;&gt;&lt;a href=&quot;#0x01-DockerHub国内镜像源列表&quot; class=&quot;headerlink&quot; title=&quot;0x01 DockerHub国内镜像源列表&quot;&gt;&lt;/a&gt;0x01 DockerHub国内镜像源列表&lt;/</summary>
+      
+    
+    
+    
+    <category term="系统配置" scheme="https://aisk.cc/categories/%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE/"/>
+    
+    
+    <category term="CentOS" scheme="https://aisk.cc/tags/CentOS/"/>
+    
+    <category term="Linux" scheme="https://aisk.cc/tags/Linux/"/>
+    
+    <category term="Ubuntu" scheme="https://aisk.cc/tags/Ubuntu/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux磁盘分区并挂载</title>
@@ -553,37 +581,6 @@
     <category term="MariaDB" scheme="https://aisk.cc/tags/MariaDB/"/>
     
     <category term="数据库" scheme="https://aisk.cc/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux find命令</title>
-    <link href="https://aisk.cc/posts/4935.html"/>
-    <id>https://aisk.cc/posts/4935.html</id>
-    <published>2020-04-28T03:00:00.000Z</published>
-    <updated>2023-04-02T12:32:46.050Z</updated>
-    
-    <content type="html"><![CDATA[<p>Linux find命令用来在指定目录下查找文件。任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则find命令将在当前目录下查找子目录与文件。并且将查找到的子目录和文件全部进行显示。</p><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find   path   -option   [   -<span class="built_in">print</span> ]   [ -<span class="built_in">exec</span>   -ok   <span class="built_in">command</span> ]   &#123;&#125; \;</span><br></pre></td></tr></table></figure><h4 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明 :"></a>参数说明 :</h4><p>find 根据下列规则判断 path 和 expression，在命令列上第一个 - ( ) , ! 之前的部份为 path，之后的是 expression。如果 path 是空字串则使用目前路径，如果 expression 是空字串则使用 -print 为预设 expression。</p><p>expression 中可使用的选项有二三十个之多，在此只介绍最常用的部份。</p><ul><li><p>-mount, -xdev : 只检查和指定目录在同一个文件系统下的文件，避免列出其它文件系统中的文件</p></li><li><p>-amin n : 在过去 n 分钟内被读取过</p></li><li><p>-anewer file : 比文件 file 更晚被读取过的文件</p></li><li><p>-atime n : 在过去n天内被读取过的文件</p></li><li><p>-cmin n : 在过去 n 分钟内被修改过</p></li><li><p>-cnewer file :比文件 file 更新的文件</p></li><li><p>-ctime n : 在过去n天内被修改过的文件</p></li><li><p>-empty : 空的文件-gid n or -group name : gid 是 n 或是 group 名称是 name</p></li><li><p>-ipath p, -path p : 路径名称符合 p 的文件，ipath 会忽略大小写</p></li><li><p>-name name, -iname name : 文件名称符合 name 的文件。iname 会忽略大小写</p></li><li><p>-size n : 文件大小 是 n 单位，b 代表 512 位元组的区块，c 表示字元数，k 表示 kilo bytes，w 是二个位元组。-type c : 文件类型是 c 的文件。</p></li><li><p>d: 目录</p></li><li><p>c: 字型装置文件</p></li><li><p>b: 区块装置文件</p></li><li><p>p: 具名贮列</p></li><li><p>f: 一般文件</p></li><li><p>l: 符号连结</p></li><li><p>s: socket</p></li><li><p>-pid n : process id 是 n 的文件</p></li></ul><p>你可以使用 ( ) 将运算式分隔，并使用下列运算。</p><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">exp1 -and exp2</span><br><span class="line">! expr</span><br><span class="line">-not expr</span><br><span class="line">exp1 -or exp2</span><br><span class="line">exp1, exp2</span><br></pre></td></tr></table></figure><h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>将目前目录及其子目录下所有延伸档名是 c 的文件列出来。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># find . -name &quot;*.c&quot;</span></span><br></pre></td></tr></table></figure><p>将目前目录其其下子目录中所有一般文件列出</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># find . -type f</span></span><br></pre></td></tr></table></figure><p>将目前目录及其子目录下所有最近 20 天内更新过的文件列出</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># find . -ctime -20</span></span><br></pre></td></tr></table></figure><p>查找&#x2F;var&#x2F;log目录中更改时间在7日以前的普通文件，并在删除之前询问它们：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># find /var/log -type f -mtime +7 -ok rm &#123;&#125; \;</span></span><br></pre></td></tr></table></figure><p>查找前目录中文件属主具有读、写权限，并且文件所属组的用户和其他用户具有读权限的文件：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># find . -type f -perm 644 -exec ls -l &#123;&#125; \;</span></span><br></pre></td></tr></table></figure><p>为了查找系统中所有文件长度为0的普通文件，并列出它们的完整路径：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># find / -type f -size 0 -exec ls -l &#123;&#125; \;</span></span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">服务器磁盘满，一般由大的日志文件导致，需找到大文件并删除。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">find / -size +500M -print0|xargs -0 <span class="built_in">du</span> -m|<span class="built_in">sort</span> -nr</span><br></pre></td></tr></table></figure><p>上述方法从根路径查找，可能列出一些系统文件。可以在这个查找之前先进行一下过滤。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">du</span> -m -d 1 /|<span class="built_in">sort</span> -nr</span><br></pre></td></tr></table></figure><p>记得写过一个xxx.c的文件，但是忘了放哪里了</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find / -name *xxx*.c <span class="comment">#模糊查找下这个文件</span></span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;Linux find命令用来在指定目录下查找文件。任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则find命令将在当前目录下查找子目录与文件。并且将查找到的子目录和文件全部进行显示。&lt;/p&gt;
-&lt;h3 id=&quot;语法&quot;&gt;&lt;a href=&quot;#</summary>
-      
-    
-    
-    
-    <category term="数据备份" scheme="https://aisk.cc/categories/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/"/>
-    
-    
-    <category term="Linux" scheme="https://aisk.cc/tags/Linux/"/>
-    
-    <category term="Ubuntu" scheme="https://aisk.cc/tags/Ubuntu/"/>
-    
-    <category term="备份" scheme="https://aisk.cc/tags/%E5%A4%87%E4%BB%BD/"/>
-    
-    <category term="恢复" scheme="https://aisk.cc/tags/%E6%81%A2%E5%A4%8D/"/>
     
   </entry>
   

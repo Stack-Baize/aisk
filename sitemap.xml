@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://aisk.cc/posts/7a80853b.html</loc>
+    
+    <lastmod>2024-08-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://aisk.cc/posts/ios.html</loc>
     
     <lastmod>2024-08-07</lastmod>
@@ -281,7 +290,7 @@
   </url>
   
   <url>
-    <loc>https://aisk.cc/posts/7f56.html</loc>
+    <loc>https://aisk.cc/posts/688b.html</loc>
     
     <lastmod>2023-04-02</lastmod>
     
@@ -308,7 +317,16 @@
   </url>
   
   <url>
-    <loc>https://aisk.cc/posts/688b.html</loc>
+    <loc>https://aisk.cc/posts/632e.html</loc>
+    
+    <lastmod>2023-04-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/7f56.html</loc>
     
     <lastmod>2023-04-02</lastmod>
     
@@ -318,15 +336,6 @@
   
   <url>
     <loc>https://aisk.cc/posts/ebe6.html</loc>
-    
-    <lastmod>2023-04-02</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/posts/632e.html</loc>
     
     <lastmod>2023-04-02</lastmod>
     

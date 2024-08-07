@@ -325,6 +325,87 @@
       </tags>
   </entry>
   <entry>
+    <title>DockerHub国内镜像源列表</title>
+    <url>/posts/7a80853b.html</url>
+    <content><![CDATA[<h2 id="0x01-DockerHub国内镜像源列表"><a href="#0x01-DockerHub国内镜像源列表" class="headerlink" title="0x01 DockerHub国内镜像源列表"></a>0x01 DockerHub国内镜像源列表</h2><p>此列表只收录无需限定条件的DockerHub镜像源，感谢这些公益服务者。</p>
+<p>2024年6月18日 亲测可用</p>
+<table>
+<thead>
+<tr>
+<th align="left">DockerHub镜像仓库</th>
+<th align="left">镜像加速器地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Docker镜像加速站</td>
+<td align="left"><a href="https://hub.uuuadc.top/">https://hub.uuuadc.top/</a></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">docker.1panel.live</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">hub.rat.dev</td>
+</tr>
+<tr>
+<td align="left">DockerHub 镜像加速代理</td>
+<td align="left"><a href="https://docker.anyhub.us.kg/">https://docker.anyhub.us.kg</a></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><a href="https://docker.chenby.cn/">https://docker.chenby.cn</a></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><a href="https://dockerhub.jobcher.com/">https://dockerhub.jobcher.com/</a></td>
+</tr>
+<tr>
+<td align="left">镜像使用说明</td>
+<td align="left"><a href="https://dockerhub.icu/">https://dockerhub.icu</a></td>
+</tr>
+<tr>
+<td align="left">Docker镜像加速站</td>
+<td align="left"><a href="https://docker.ckyl.me/">https://docker.ckyl.me</a></td>
+</tr>
+<tr>
+<td align="left">镜像使用说明</td>
+<td align="left"><a href="https://docker.awsl9527.cn/">https://docker.awsl9527.cn</a></td>
+</tr>
+<tr>
+<td align="left">镜像使用说明</td>
+<td align="left"><a href="https://docker.hpcloud.cloud/">https://docker.hpcloud.cloud</a></td>
+</tr>
+<tr>
+<td align="left">AtomHub 可信镜像仓库平台（只包含基础镜像，共336个）</td>
+<td align="left"><a href="https://atomhub.openatom.cn/">https://atomhub.openatom.cn</a></td>
+</tr>
+<tr>
+<td align="left">DaoCloud 镜像站</td>
+<td align="left"><a href="https://docker.m.daocloud.io/">https://docker.m.daocloud.io</a></td>
+</tr>
+</tbody></table>
+<h2 id="0x02-使用教程"><a href="#0x02-使用教程" class="headerlink" title="0x02 使用教程"></a>0x02 使用教程</h2><p>为了加速镜像拉取，使用以下命令设置registry mirror</p>
+<blockquote>
+<p>支持系统：Ubuntu 16.04+、Debian 8+、CentOS 7+</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /etc/docker</span><br><span class="line">sudo <span class="built_in">tee</span> /etc/docker/daemon.json &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    &quot;registry-mirrors&quot;: [</span></span><br><span class="line"><span class="string">        &quot;https://hub.uuuadc.top&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://docker.anyhub.us.kg&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://dockerhub.jobcher.com&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://dockerhub.icu&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://docker.ckyl.me&quot;,</span></span><br><span class="line"><span class="string">        &quot;https://docker.awsl9527.cn&quot;</span></span><br><span class="line"><span class="string">    ]</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用DockerHub Proxy，以下以 <code>hub.uuuadc.top</code> 为例：可以根据列表自行替换</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull hub.uuuadc.top/library/mysql:5.7</span><br></pre></td></tr></table></figure>
+
+<p>说明：library是一个特殊的命名空间，它代表的是官方镜像。如果是某个用户的镜像就把library替换为镜像的用户名</p>
+]]></content>
+      <categories>
+        <category>系统配置</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CentOS8编译安装配置MySQL8数据库</title>
     <url>/posts/a7ac.html</url>
     <content><![CDATA[<h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><p>操作系统：CentOS 8.1</p>
@@ -2385,11 +2466,56 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux 查看服务器远程管理IP(DELL iDrac和HP iLO)</title>
-    <url>/posts/7f56.html</url>
-    <content><![CDATA[<h3 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y OpenIPMI ipmitool</span><br><span class="line">[root@localhost ~]<span class="comment"># ipmitool lan print</span></span><br><span class="line">Set <span class="keyword">in</span> Progress         : Set Complete</span><br><span class="line">IP Address Source       : Static Address</span><br><span class="line">IP Address              : 10.1.6.200</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : e4:72:e2:c8:70:a5</span><br><span class="line">SNMP Community String   : TrapAdmin12<span class="comment">#$</span></span><br><span class="line">IP Header               : TTL=0x40 Flags=0x40 Precedence=0x00 TOS=0x10</span><br><span class="line">Default Gateway IP      : 10.1.6.254</span><br></pre></td></tr></table></figure>
+    <title>修改MySQL数据库字符编码为utf8mb4解决中文乱码</title>
+    <url>/posts/688b.html</url>
+    <content><![CDATA[<h3 id="故障情况"><a href="#故障情况" class="headerlink" title="故障情况"></a>故障情况</h3><p>由于MySQL编码原因会导致数据库出现乱码。修改为UTF-8后发现将emoji 文字直接写入 SQL 中，执行 insert 语句报错。</p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>修改MySQL数据库字符编码为utf8mb4，utf8mb4包含全世界所有国家需要用到的字符,是国际编码。</p>
+<h3 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h3><h4 id="1、进入MySQL控制台"><a href="#1、进入MySQL控制台" class="headerlink" title="1、进入MySQL控制台"></a>1、进入MySQL控制台</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p</span><br><span class="line"><span class="comment">#输入密码进入</span></span><br><span class="line">status;</span><br><span class="line"><span class="comment">#查看当前MySQL运行状态，</span></span><br><span class="line">Server characterset: latin1</span><br><span class="line">Db characterset: latin1</span><br><span class="line">Client characterset: utf8mb4</span><br><span class="line">Conn. characterset: utf8mb4</span><br></pre></td></tr></table></figure>
 
-<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install ipmitool</span><br><span class="line">[root@localhost ~]<span class="comment"># ipmitool lan print</span></span><br><span class="line">Set <span class="keyword">in</span> Progress         : Set Complete</span><br><span class="line">IP Address Source       : Static Address</span><br><span class="line">IP Address              : 10.1.6.200</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : e4:72:e2:c8:70:a5</span><br><span class="line">SNMP Community String   : TrapAdmin12<span class="comment">#$</span></span><br><span class="line">IP Header               : TTL=0x40 Flags=0x40 Precedence=0x00 TOS=0x10</span><br><span class="line">Default Gateway IP      : 10.1.6.254</span><br></pre></td></tr></table></figure>
+<p>默认客户端和服务器端都用了latin1编码，所以会出现乱码。</p>
+<h4 id="2、修改mysql配置文件"><a href="#2、修改mysql配置文件" class="headerlink" title="2、修改mysql配置文件"></a>2、修改mysql配置文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /etc/my.cnf</span><br><span class="line"><span class="comment">#在[client]段增加下面代码</span></span><br><span class="line">default-character-set=utf8mb4</span><br><span class="line"><span class="comment">#在[mysqld]段增加下面的代码</span></span><br><span class="line">default-storage-engine=INNODB</span><br><span class="line">character-set-server=utf8mb4</span><br><span class="line">collation-server=utf8mb4_general_ci</span><br><span class="line">:wq! <span class="comment">#保存退出</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3、service-mysqld-restart-重启MySQL"><a href="#3、service-mysqld-restart-重启MySQL" class="headerlink" title="3、service mysqld restart #重启MySQL"></a>3、service mysqld restart #重启MySQL</h4><p>再次进入MySQL控制台查看字符编码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">status;</span><br><span class="line">Server characterset: utf8mb4</span><br><span class="line">Db characterset: utf8mb4</span><br><span class="line">Client characterset: utf8mb4</span><br><span class="line">Conn. characterset: utf8mb4</span><br><span class="line"><span class="comment">#查看MySQL字符集</span></span><br><span class="line">show variables like <span class="string">&#x27;character_set_%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>MySQL数据库字符集编码修改完成！</p>
+<p><code>参数说明</code></p>
+<ul>
+<li>character_set_client：客户端请求数据的字符集。</li>
+<li>character_set_connection：从客户端接收到数据，然后传输的字符集。</li>
+<li>character_set_database：默认数据库的字符集，无论默认数据库如何改变，都是这个字符集；如果没有默认数据库，使character_set_server指定的字符集，此参数无需设置。</li>
+<li>character_set_filesystem：把操作系统上文件名转化成此字符集，即把character_set_client转换character_set_filesystem，默认binary即可。</li>
+<li>character_set_results：结果集的字符集。</li>
+<li>character_set_server：数据库服务器的默认字符集。</li>
+<li>character_set_system：这个值总是utf8mb4，不需要设置，存储系统元数据的字符集。</li>
+</ul>
+<p><code>备注：</code><br>MySQL 5.5之前的版本设置办法：<br>在[client]段下添加</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">default-character-set=utf8mb4</span><br></pre></td></tr></table></figure>
+
+<p>在[mysqld]段下添加</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">default-character-set=utf8mb4</span><br></pre></td></tr></table></figure>
+
+<p>注意，如果修改后不能启动报错，把<code>[mysqld]</code>段下<code>default-character-set=utf8</code>改为<code>character_set_server=utf8mb4</code>，取消<code>[client]</code>段的设置。</p>
+<p>创建数据库的命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Create DATABASE IF NOT EXISTS mydata default charset utf8mb4 COLLATE utf8mb4_general_ci;</span><br></pre></td></tr></table></figure>
+<p>至此，修改MySQL数据库字符编码为utf8mb4解决中文乱码问题。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 系统修复</title>
+    <url>/posts/462d.html</url>
+    <content><![CDATA[<h3 id="CentOS-系统修复"><a href="#CentOS-系统修复" class="headerlink" title="CentOS 系统修复"></a>CentOS 系统修复</h3><p>首先，光盘引导选择<code>Troubleshooting</code>-<code>Rescue a CentOS system</code>,进入光盘引导修改系统，进入界面后输入<code>3</code>，进入<code>Skip to shell</code>, shell 操作界面</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ lsblk <span class="comment">#查看磁盘情况，随意挂载个磁盘查看是否为根目录。</span></span><br><span class="line">$ <span class="built_in">mkdir</span> /demo </span><br><span class="line">$ mount /dev/vda3 /demo</span><br><span class="line">$ <span class="built_in">ls</span>  <span class="comment">#查看目录是否为根目录</span></span><br><span class="line">$ umount /demo   <span class="comment">#卸载磁盘</span></span><br><span class="line">$ blkid  /dev/vda3  <span class="comment">#查看磁盘分区格式</span></span><br><span class="line">$ fsck  -fy   /dev/vda3    <span class="comment">#ext格式使用此命令修复</span></span><br><span class="line">$ xfs_repair /dev/vda3     <span class="comment">#xfs 格式使用此命令修复</span></span><br><span class="line"><span class="keyword">done</span>     <span class="comment">#说明修复完了，把iso卸载掉然后reboot就好</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Ubuntu</strong>系统修复相同</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>操作系统</category>
@@ -2664,25 +2790,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux 系统修复</title>
-    <url>/posts/462d.html</url>
-    <content><![CDATA[<h3 id="CentOS-系统修复"><a href="#CentOS-系统修复" class="headerlink" title="CentOS 系统修复"></a>CentOS 系统修复</h3><p>首先，光盘引导选择<code>Troubleshooting</code>-<code>Rescue a CentOS system</code>,进入光盘引导修改系统，进入界面后输入<code>3</code>，进入<code>Skip to shell</code>, shell 操作界面</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ lsblk <span class="comment">#查看磁盘情况，随意挂载个磁盘查看是否为根目录。</span></span><br><span class="line">$ <span class="built_in">mkdir</span> /demo </span><br><span class="line">$ mount /dev/vda3 /demo</span><br><span class="line">$ <span class="built_in">ls</span>  <span class="comment">#查看目录是否为根目录</span></span><br><span class="line">$ umount /demo   <span class="comment">#卸载磁盘</span></span><br><span class="line">$ blkid  /dev/vda3  <span class="comment">#查看磁盘分区格式</span></span><br><span class="line">$ fsck  -fy   /dev/vda3    <span class="comment">#ext格式使用此命令修复</span></span><br><span class="line">$ xfs_repair /dev/vda3     <span class="comment">#xfs 格式使用此命令修复</span></span><br><span class="line"><span class="keyword">done</span>     <span class="comment">#说明修复完了，把iso卸载掉然后reboot就好</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>Ubuntu</strong>系统修复相同</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>CentOS</tag>
-        <tag>Linux</tag>
-        <tag>Ubuntu</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用Sublime Text 3写Markdown</title>
     <url>/posts/819bb5a6.html</url>
     <content><![CDATA[<h2 id="首先介绍几个Markdown语法说明"><a href="#首先介绍几个Markdown语法说明" class="headerlink" title="首先介绍几个Markdown语法说明"></a>首先介绍几个Markdown语法说明</h2><ul>
@@ -2845,178 +2952,6 @@
         <tag>Linux</tag>
         <tag>Ubuntu</tag>
         <tag>硬盘分区</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>修改MySQL数据库字符编码为utf8mb4解决中文乱码</title>
-    <url>/posts/688b.html</url>
-    <content><![CDATA[<h3 id="故障情况"><a href="#故障情况" class="headerlink" title="故障情况"></a>故障情况</h3><p>由于MySQL编码原因会导致数据库出现乱码。修改为UTF-8后发现将emoji 文字直接写入 SQL 中，执行 insert 语句报错。</p>
-<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>修改MySQL数据库字符编码为utf8mb4，utf8mb4包含全世界所有国家需要用到的字符,是国际编码。</p>
-<h3 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h3><h4 id="1、进入MySQL控制台"><a href="#1、进入MySQL控制台" class="headerlink" title="1、进入MySQL控制台"></a>1、进入MySQL控制台</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p</span><br><span class="line"><span class="comment">#输入密码进入</span></span><br><span class="line">status;</span><br><span class="line"><span class="comment">#查看当前MySQL运行状态，</span></span><br><span class="line">Server characterset: latin1</span><br><span class="line">Db characterset: latin1</span><br><span class="line">Client characterset: utf8mb4</span><br><span class="line">Conn. characterset: utf8mb4</span><br></pre></td></tr></table></figure>
-
-<p>默认客户端和服务器端都用了latin1编码，所以会出现乱码。</p>
-<h4 id="2、修改mysql配置文件"><a href="#2、修改mysql配置文件" class="headerlink" title="2、修改mysql配置文件"></a>2、修改mysql配置文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /etc/my.cnf</span><br><span class="line"><span class="comment">#在[client]段增加下面代码</span></span><br><span class="line">default-character-set=utf8mb4</span><br><span class="line"><span class="comment">#在[mysqld]段增加下面的代码</span></span><br><span class="line">default-storage-engine=INNODB</span><br><span class="line">character-set-server=utf8mb4</span><br><span class="line">collation-server=utf8mb4_general_ci</span><br><span class="line">:wq! <span class="comment">#保存退出</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="3、service-mysqld-restart-重启MySQL"><a href="#3、service-mysqld-restart-重启MySQL" class="headerlink" title="3、service mysqld restart #重启MySQL"></a>3、service mysqld restart #重启MySQL</h4><p>再次进入MySQL控制台查看字符编码</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">status;</span><br><span class="line">Server characterset: utf8mb4</span><br><span class="line">Db characterset: utf8mb4</span><br><span class="line">Client characterset: utf8mb4</span><br><span class="line">Conn. characterset: utf8mb4</span><br><span class="line"><span class="comment">#查看MySQL字符集</span></span><br><span class="line">show variables like <span class="string">&#x27;character_set_%&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p>MySQL数据库字符集编码修改完成！</p>
-<p><code>参数说明</code></p>
-<ul>
-<li>character_set_client：客户端请求数据的字符集。</li>
-<li>character_set_connection：从客户端接收到数据，然后传输的字符集。</li>
-<li>character_set_database：默认数据库的字符集，无论默认数据库如何改变，都是这个字符集；如果没有默认数据库，使character_set_server指定的字符集，此参数无需设置。</li>
-<li>character_set_filesystem：把操作系统上文件名转化成此字符集，即把character_set_client转换character_set_filesystem，默认binary即可。</li>
-<li>character_set_results：结果集的字符集。</li>
-<li>character_set_server：数据库服务器的默认字符集。</li>
-<li>character_set_system：这个值总是utf8mb4，不需要设置，存储系统元数据的字符集。</li>
-</ul>
-<p><code>备注：</code><br>MySQL 5.5之前的版本设置办法：<br>在[client]段下添加</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">default-character-set=utf8mb4</span><br></pre></td></tr></table></figure>
-
-<p>在[mysqld]段下添加</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">default-character-set=utf8mb4</span><br></pre></td></tr></table></figure>
-
-<p>注意，如果修改后不能启动报错，把<code>[mysqld]</code>段下<code>default-character-set=utf8</code>改为<code>character_set_server=utf8mb4</code>，取消<code>[client]</code>段的设置。</p>
-<p>创建数据库的命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Create DATABASE IF NOT EXISTS mydata default charset utf8mb4 COLLATE utf8mb4_general_ci;</span><br></pre></td></tr></table></figure>
-<p>至此，修改MySQL数据库字符编码为utf8mb4解决中文乱码问题。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>数据库</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>linux主机加固</title>
-    <url>/posts/ebe6.html</url>
-    <content><![CDATA[<h2 id="0x01-前-言"><a href="#0x01-前-言" class="headerlink" title="0x01 前 言"></a>0x01 前 言</h2><p>Linux系统被应用于大部分企业的服务器上，因此在等保测评中主机加固也是必须要完成的一项环节。<br>由于在之后项目开始要进行主机加固，因此对linux的加固流程进行总结学习。<br>Linux的主机加固主要分为：账号安全、认证授权、协议安全、审计安全。简而言之，就是4A（统一安全管理平台解决方案）。</p>
-<p>这边就使用我自己kali的虚拟机进行试验学习。</p>
-<h2 id="0x02-基础加固"><a href="#0x02-基础加固" class="headerlink" title="0x02 基础加固"></a>0x02 基础加固</h2><h3 id="口令生存期"><a href="#口令生存期" class="headerlink" title="口令生存期"></a>口令生存期</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/login.defs</span><br><span class="line"><span class="comment">#在此处对密码的长度、时间、过期警告进行修改</span></span><br><span class="line">PASS_MAX_DAYS   90  <span class="comment">#密码最长过期天数</span></span><br><span class="line">PASS_MIN_DAYS   10   <span class="comment">#密码最小过期天数</span></span><br><span class="line">PASS_WARN_AGE   7   <span class="comment">#密码过期警告天数</span></span><br><span class="line">如果修改设置有最小长度也需要修改</span><br><span class="line">PASS_MIN_LEN    8   <span class="comment">#密码最小长度</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="口令复杂度（很重要）"><a href="#口令复杂度（很重要）" class="headerlink" title="口令复杂度（很重要）"></a>口令复杂度（很重要）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/pam.d/system-auth</span><br><span class="line"><span class="comment">#在文件中找到 password requisite  pam_cracklib.so</span></span><br><span class="line"><span class="comment">#将其修改为:</span></span><br><span class="line">password requisite  pam_cracklib.so try_first_pass retry=3 dcredit=-1 lcredit=-1 ucredit=-1 ocredit=-1 minlen=8</span><br></pre></td></tr></table></figure>
-
-<p>备注：至少包含一个数字、一个小写字母、一个大写字母、一个特殊字符、且密码长度&gt;&#x3D;8</p>
-<h3 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/version</span><br></pre></td></tr></table></figure>
-
-<h3 id="限制xx用户登录"><a href="#限制xx用户登录" class="headerlink" title="限制xx用户登录"></a>限制xx用户登录</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/hosts.deny</span><br><span class="line"><span class="comment">#添加内容：</span></span><br><span class="line">sshd : 192.168.1.1</span><br><span class="line"><span class="comment">#禁止192.168.1.1对服务器进行ssh的登陆</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="检查是否有其他uid-0的用户"><a href="#检查是否有其他uid-0的用户" class="headerlink" title="检查是否有其他uid&#x3D;0的用户"></a>检查是否有其他uid&#x3D;0的用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">awk -F “：” <span class="string">&#x27;($3==0)  &#123;print  $1&#125; &#x27;</span> /etc/passwd</span><br></pre></td></tr></table></figure>
-
-<h3 id="登陆超时限制"><a href="#登陆超时限制" class="headerlink" title="登陆超时限制"></a>登陆超时限制</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> -p /etc/profile /etc/profile_bak <span class="comment">#（备份）</span></span><br><span class="line">gedit /etc/profile</span><br><span class="line"><span class="comment">#增加</span></span><br><span class="line">TMOUT=300</span><br><span class="line"><span class="built_in">export</span> TMOUT</span><br><span class="line"></span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export TMOUT=300&#x27;</span>&gt;&gt;/etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;readonly TMOUT&#x27;</span> &gt;&gt;/etc/profile</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-
-<h3 id="检查是否使用PAM认证模块禁止wheel组之外的用户su为root"><a href="#检查是否使用PAM认证模块禁止wheel组之外的用户su为root" class="headerlink" title="检查是否使用PAM认证模块禁止wheel组之外的用户su为root"></a>检查是否使用PAM认证模块禁止wheel组之外的用户su为root</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/pam.d/su</span><br><span class="line"><span class="comment">#新增</span></span><br><span class="line">auth          sufficient     pam_rootok.so</span><br><span class="line">auth          required     pam_wheel.so use_uid</span><br></pre></td></tr></table></figure>
-
-<p>备注：auth与sufficient之间由两个tab建隔开，sufficient与动态库路径之间使用一个tab建隔开</p>
-<h3 id="禁用无用账户"><a href="#禁用无用账户" class="headerlink" title="禁用无用账户"></a>禁用无用账户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/passwd <span class="comment">#查看口令文件，确认不必要的账号。</span></span><br><span class="line"></span><br><span class="line">passwd -l user <span class="comment"># 锁定不必要的账号</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="账户锁定"><a href="#账户锁定" class="headerlink" title="账户锁定"></a>账户锁定</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/pam.d/system-auth</span><br><span class="line"><span class="comment">#在文件中修改或者添加</span></span><br><span class="line">auth required pam_tally.so onerr=fail deny=3 unlock_time=7200</span><br><span class="line"></span><br><span class="line"><span class="comment">#锁定账户举例：</span></span><br><span class="line">passwd -l bin</span><br><span class="line">passwd -l sys</span><br><span class="line">passwd -l adm</span><br></pre></td></tr></table></figure>
-
-<h3 id="检查系统弱口令"><a href="#检查系统弱口令" class="headerlink" title="检查系统弱口令"></a>检查系统弱口令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">john /etc/shadow --single</span><br><span class="line">john /etc/shadow --wordlist=pass.dic</span><br></pre></td></tr></table></figure>
-
-<p>我这边有报错 就不展示了<br>使用passwd 用户 命令为用户设置复杂的密码</p>
-<h2 id="0x03-软件协议安全"><a href="#0x03-软件协议安全" class="headerlink" title="0x03 软件协议安全"></a>0x03 软件协议安全</h2><h3 id="openssh升级（按需做）"><a href="#openssh升级（按需做）" class="headerlink" title="openssh升级（按需做）"></a>openssh升级（按需做）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum update  openssh</span><br></pre></td></tr></table></figure>
-
-<h3 id="定时任务（防止病毒感染）"><a href="#定时任务（防止病毒感染）" class="headerlink" title="定时任务（防止病毒感染）"></a>定时任务（防止病毒感染）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#定时任务检查：</span></span><br><span class="line">crontab -l</span><br><span class="line"></span><br><span class="line"><span class="comment">#一次性任务检查：</span></span><br><span class="line">at -l</span><br></pre></td></tr></table></figure>
-
-<h3 id="限制ssh登录（看是否需要）"><a href="#限制ssh登录（看是否需要）" class="headerlink" title="限制ssh登录（看是否需要）"></a>限制ssh登录（看是否需要）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line"><span class="comment">#查看PermitRootLogin是否为no</span></span><br><span class="line">PermitRootLogin no <span class="comment">#不允许root登陆</span></span><br><span class="line">Protocol 2 <span class="comment">#修改ssh使用的协议版本</span></span><br><span class="line">MaxAuthTries 3 <span class="comment">#修改允许密码错误次数</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;tty1&quot;</span> &gt; /etc/securetty</span><br><span class="line">hmod 700 /root</span><br></pre></td></tr></table></figure>
-
-<h3 id="限制su为root用户"><a href="#限制su为root用户" class="headerlink" title="限制su为root用户"></a>限制su为root用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/pam.d/su</span><br><span class="line"><span class="comment">#在头部添加</span></span><br><span class="line">auth required /lib/security/pam_wheel.so group=wheel</span><br></pre></td></tr></table></figure>
-
-<h3 id="禁止root用户登录ftp"><a href="#禁止root用户登录ftp" class="headerlink" title="禁止root用户登录ftp"></a>禁止root用户登录ftp</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#因为我的kali下没有这个文件，因此借鉴一下网上的</span></span><br><span class="line"><span class="built_in">cat</span> /etc/pam.d/vsftpd</span><br><span class="line">Auth required pam_listfile.so item=user sense=deny file=/etc/vsftpd/ftpusers onerr=succeed</span><br><span class="line"><span class="comment">#其中file=/etc/vsftpd/ftpusers即为当前系统上的ftpusers文件.</span></span><br><span class="line"><span class="built_in">echo</span>  “root”   &gt;&gt;   /etc/vsftpd/ftpusers</span><br></pre></td></tr></table></figure>
-
-<h3 id="防止flood攻击"><a href="#防止flood攻击" class="headerlink" title="防止flood攻击"></a>防止flood攻击</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit  /etc/sysctl.conf</span><br><span class="line"><span class="comment">#增加</span></span><br><span class="line">net.ipv4.tcp_syncookies = 1</span><br><span class="line">sysctl  -p</span><br></pre></td></tr></table></figure>
-
-<h3 id="禁ping"><a href="#禁ping" class="headerlink" title="禁ping"></a>禁ping</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/sys/net/ipv4/icmp_echo_igore_all</span><br></pre></td></tr></table></figure>
-
-<h3 id="检查异常进程"><a href="#检查异常进程" class="headerlink" title="检查异常进程"></a>检查异常进程</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps aux|<span class="built_in">sort</span> -rn -k +3|<span class="built_in">head</span></span><br><span class="line"><span class="comment">#检查cpu占用前10</span></span><br><span class="line">ps aux|<span class="built_in">sort</span> -rn -k +4|<span class="built_in">head</span></span><br><span class="line"><span class="comment">#检查内存占用前10</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="关闭无效的服务及端口"><a href="#关闭无效的服务及端口" class="headerlink" title="关闭无效的服务及端口"></a>关闭无效的服务及端口</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#比如邮箱</span></span><br><span class="line">service postfix status</span><br><span class="line">chkconfig --del postfix</span><br><span class="line">chkconfig postfix off</span><br><span class="line"></span><br><span class="line"><span class="comment">#比如cpus</span></span><br><span class="line">service cups status</span><br><span class="line">chkconfig --del cups</span><br><span class="line">chkconfig cups off</span><br></pre></td></tr></table></figure>
-
-<h3 id="设置防火墙策略"><a href="#设置防火墙策略" class="headerlink" title="设置防火墙策略"></a>设置防火墙策略</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#或者用防火墙策略：</span></span><br><span class="line">service iptables status</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;请根据用户实际业务端口占用等情况进行设置！&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/sysconfig/iptables <span class="comment">#添加如下策略</span></span><br><span class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 8080 -j ACCEPT</span><br><span class="line">-A INPUT -m state --state NEW -m udp -p udp --dport 8080 -j ACCEPT</span><br></pre></td></tr></table></figure>
-
-<p>以下举例：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iptables -I INPUT -s 22.48.11.11 -j DROP</span><br><span class="line"><span class="comment"># 22.48.11.11的包全部屏蔽</span></span><br><span class="line">iptables -I INPUT -s 22.48.11.0/24 -j DROP</span><br><span class="line"><span class="comment">#22.48.11.1到22.48.11.255的访问全部屏蔽</span></span><br><span class="line">iptables -I INPUT -s 192.168.1.1 -p tcp --dport 80 -j DROP</span><br><span class="line"><span class="comment"># 192.168.1.1的80端口的访问全部屏蔽</span></span><br><span class="line">iptables -I INPUT -s 192.168.1.0/24 -p tcp --dport 80 -j DROP</span><br><span class="line"><span class="comment">#192.168.1.1到192.168.1.255的80端口的访问全部屏蔽</span></span><br><span class="line">service iptabels restart</span><br><span class="line"><span class="comment">#重启防火墙</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="设置历史记录数量"><a href="#设置历史记录数量" class="headerlink" title="设置历史记录数量"></a>设置历史记录数量</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /etc/profile /etc/profile_xu_bak <span class="comment">#（备份）</span></span><br><span class="line">sed -i s/<span class="string">&#x27;HISTSIZE=1000&#x27;</span>/<span class="string">&#x27;HISTSIZE=5000&#x27;</span>/g /etc/profile  <span class="comment">#（修改）</span></span><br><span class="line"><span class="built_in">cat</span> /etc/profile |grep HISTSIZE|grep -v <span class="built_in">export</span>   <span class="comment">#（检查）</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="配置用户最小权限"><a href="#配置用户最小权限" class="headerlink" title="配置用户最小权限"></a>配置用户最小权限</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 644 /etc/passwd</span><br><span class="line"><span class="built_in">chmod</span> 400 /etc/shadow</span><br><span class="line"><span class="built_in">chmod</span> 644 /etc/group</span><br></pre></td></tr></table></figure>
-
-<h3 id="文件与目录缺省权限控制"><a href="#文件与目录缺省权限控制" class="headerlink" title="文件与目录缺省权限控制"></a>文件与目录缺省权限控制</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /etc/profile /etc/profile.bak  <span class="comment">#（备份）</span></span><br><span class="line">gedit  /etc/profile</span><br><span class="line"><span class="comment">#增加</span></span><br><span class="line"><span class="built_in">umask</span> 027</span><br><span class="line"><span class="built_in">source</span>  /etc/profile</span><br></pre></td></tr></table></figure>
-
-<h2 id="0x04-日志审计"><a href="#0x04-日志审计" class="headerlink" title="0x04 日志审计"></a>0x04 日志审计</h2><h3 id="启用远程日志功能"><a href="#启用远程日志功能" class="headerlink" title="启用远程日志功能"></a>启用远程日志功能</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/rsyslog.conf</span><br><span class="line">*.*         @Syslog日志服务器IP</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意：* 和@之间存在的是tab键，非空格。</p>
-</blockquote>
-<h3 id="检查是否记录安全事件日志"><a href="#检查是否记录安全事件日志" class="headerlink" title="检查是否记录安全事件日志"></a>检查是否记录安全事件日志</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit  /etc/syslog.conf 或者 /etc/rsyslog.conf</span><br><span class="line"><span class="comment">#在文件中加入如下内容:</span></span><br><span class="line">*.err;kern.debug;daemon.notice     /var/log/messages</span><br><span class="line"><span class="built_in">chmod</span> 640 /var/log/messages</span><br><span class="line">service rsyslog restart</span><br></pre></td></tr></table></figure>
-
-<h3 id="日志保留半年以上"><a href="#日志保留半年以上" class="headerlink" title="日志保留半年以上"></a>日志保留半年以上</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span>/etc/logrotate.conf /etc/logrotate.conf_xu_bak   <span class="comment">#（备份）</span></span><br><span class="line">sed -i s/<span class="string">&#x27;rotate 4&#x27;</span>/<span class="string">&#x27;rotate 12&#x27;</span>/g /etc/logrotate.conf   <span class="comment">#（修改）</span></span><br><span class="line">service syslog restart    <span class="comment">#（重启）</span></span><br><span class="line"><span class="built_in">cat</span> /etc/logrotate.conf |grep -v <span class="string">&#x27;#&#x27;</span> |grep rotate    <span class="comment">#（检查）</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>信息安全</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>主机加固</tag>
-        <tag>PAM认证</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux iostat命令详解</title>
-    <url>/posts/c450a840.html</url>
-    <content><![CDATA[<p>iostat是I&#x2F;O statistics（输入&#x2F;输出统计）的缩写，iostat工具将对系统的磁盘操作活动进行监视。它的特点是汇报磁盘活动统计情况，同时也会汇报出CPU使用情况。iostat也有一个弱点，就是它不能对某个进程进行深入分析，仅对系统的整体情况进行分析</p>
-<h2 id="常见命令展示"><a href="#常见命令展示" class="headerlink" title="常见命令展示"></a>常见命令展示</h2><h3 id="iostat-安装"><a href="#iostat-安装" class="headerlink" title="iostat 安装"></a>iostat 安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># iostat属于sysstat软件包。可以直接安装。</span></span><br><span class="line">yum install sysstat</span><br></pre></td></tr></table></figure>
-
-<h3 id="显示所有设备负载情况"><a href="#显示所有设备负载情况" class="headerlink" title="显示所有设备负载情况"></a>显示所有设备负载情况</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@i-003F281E ~]<span class="comment"># iostat</span></span><br><span class="line">Linux 3.10.0-1062.4.1.el7.x86_64 (i-003F281E) 	2020年03月05日 	_x86_64_	(4 CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %<span class="built_in">nice</span> %system %iowait  %steal   %idle</span><br><span class="line">           1.65    0.00    0.58    0.38    0.01   97.38</span><br><span class="line"></span><br><span class="line">Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn</span><br><span class="line">vda              10.84       126.28      1034.29     317347    2599151</span><br><span class="line">dm-0             11.81       120.22      1011.98     302106    2543083</span><br><span class="line">dm-1              0.05         1.29         0.00       3236          0</span><br><span class="line">dm-2              0.03         0.43         0.81       1090       2048</span><br></pre></td></tr></table></figure>
-
-<p>cpu属性值说明：</p>
-<p>%user：CPU处在用户模式下的时间百分比。</p>
-<p>%nice：CPU处在带NICE值的用户模式下的时间百分比。</p>
-<p>%system：CPU处在系统模式下的时间百分比。</p>
-<p>%iowait：CPU等待输入输出完成时间的百分比。</p>
-<p>%steal：管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比。</p>
-<p>%idle：CPU空闲时间百分比。</p>
-<p>备注：</p>
-<p>如果%iowait的值过高，表示硬盘存在I&#x2F;O瓶颈</p>
-<p>如果%idle值高，表示CPU较空闲</p>
-<p>如果%idle值高但系统响应慢时，可能是CPU等待分配内存，应加大内存容量。</p>
-<p>如果%idle值持续低于10，表明CPU处理能力相对较低，系统中最需要解决的资源是CPU。</p>
-<p>cpu属性值说明:</p>
-<p>tps：该设备每秒的传输次数</p>
-<p>kB_read&#x2F;s：每秒从设备（drive expressed）读取的数据量；</p>
-<p>kB_wrtn&#x2F;s：每秒向设备（drive expressed）写入的数据量；</p>
-<p>kB_read：  读取的总数据量；</p>
-<p>kB_wrtn：写入的总数量数据量；</p>
-<h3 id="定时显示所有信息"><a href="#定时显示所有信息" class="headerlink" title="定时显示所有信息"></a>定时显示所有信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#【每隔2秒刷新显示，且显示3次】</span></span><br><span class="line">iostat 2  3</span><br></pre></td></tr></table></figure>
-
-<h3 id="显示指定磁盘信息"><a href="#显示指定磁盘信息" class="headerlink" title="显示指定磁盘信息"></a>显示指定磁盘信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iostat -d /dev/sda</span><br></pre></td></tr></table></figure>
-
-<h3 id="显示tty和Cpu信息"><a href="#显示tty和Cpu信息" class="headerlink" title="显示tty和Cpu信息"></a>显示tty和Cpu信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iostat -t</span><br></pre></td></tr></table></figure>
-
-<h3 id="以M为单位显示所有信息"><a href="#以M为单位显示所有信息" class="headerlink" title="以M为单位显示所有信息"></a>以M为单位显示所有信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iostat -m</span><br></pre></td></tr></table></figure>
-
-<h3 id="查看设备使用率（-util）、响应时间（await）"><a href="#查看设备使用率（-util）、响应时间（await）" class="headerlink" title="查看设备使用率（%util）、响应时间（await）"></a>查看设备使用率（%util）、响应时间（await）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#  【-d 显示磁盘使用情况，-x 显示详细信息】</span></span><br><span class="line"><span class="comment">#  d: detail</span></span><br><span class="line">iostat -d -x -k 1 1</span><br><span class="line"></span><br><span class="line">[root@i-003F281E ~]<span class="comment"># iostat -d -x -k 1 1</span></span><br><span class="line">Linux 3.10.0-1062.4.1.el7.x86_64 (i-003F281E) 	2020年03月05日 	_x86_64_	(4 CPU)</span><br><span class="line"></span><br><span class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">vda               0.01     1.86    4.47    6.09   123.00  1007.42   214.01     0.70   92.65    5.20  156.86   2.58   2.72</span><br><span class="line">dm-0              0.00     0.00    4.21    7.31   117.09   985.69   191.59     1.30  112.62    5.71  174.19   2.33   2.68</span><br><span class="line">dm-1              0.00     0.00    0.05    0.00     1.25     0.00    50.96     0.00    1.35    1.35    0.00   0.96   0.00</span><br><span class="line">dm-2              0.00     0.00    0.03    0.00     0.42     0.79    72.98     0.00   10.29    2.84  131.00   3.81   0.01</span><br></pre></td></tr></table></figure>
-
-<p>说明：</p>
-<p>rrqm&#x2F;s：  每秒进行 merge 的读操作数目.即 delta(rmerge)&#x2F;s</p>
-<p>wrqm&#x2F;s： 每秒进行 merge 的写操作数目.即 delta(wmerge)&#x2F;s</p>
-<p>%util： 一秒中有百分之多少的时间用于 I&#x2F;O</p>
-<p>如果%util接近100%，说明产生的I&#x2F;O请求太多，I&#x2F;O系统已经满负荷</p>
-<p>   idle小于70% IO压力就较大了，一般读取速度有较多的wait。</p>
-<h3 id="查看cpu状态"><a href="#查看cpu状态" class="headerlink" title="查看cpu状态"></a>查看cpu状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iostat -c 1 1</span><br><span class="line"></span><br><span class="line">[root@i-003F281E ~]<span class="comment"># iostat -c 1 1</span></span><br><span class="line">Linux 3.10.0-1062.4.1.el7.x86_64 (i-003F281E) 	2020年03月05日 	_x86_64_	(4 CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %<span class="built_in">nice</span> %system %iowait  %steal   %idle</span><br><span class="line">           1.57    0.00    0.55    0.36    0.01   97.51</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux命令</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>iostat</tag>
       </tags>
   </entry>
   <entry>
@@ -3233,6 +3168,152 @@
       <tags>
         <tag>npm</tag>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 查看服务器远程管理IP(DELL iDrac和HP iLO)</title>
+    <url>/posts/7f56.html</url>
+    <content><![CDATA[<h3 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y OpenIPMI ipmitool</span><br><span class="line">[root@localhost ~]<span class="comment"># ipmitool lan print</span></span><br><span class="line">Set <span class="keyword">in</span> Progress         : Set Complete</span><br><span class="line">IP Address Source       : Static Address</span><br><span class="line">IP Address              : 10.1.6.200</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : e4:72:e2:c8:70:a5</span><br><span class="line">SNMP Community String   : TrapAdmin12<span class="comment">#$</span></span><br><span class="line">IP Header               : TTL=0x40 Flags=0x40 Precedence=0x00 TOS=0x10</span><br><span class="line">Default Gateway IP      : 10.1.6.254</span><br></pre></td></tr></table></figure>
+
+<h3 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install ipmitool</span><br><span class="line">[root@localhost ~]<span class="comment"># ipmitool lan print</span></span><br><span class="line">Set <span class="keyword">in</span> Progress         : Set Complete</span><br><span class="line">IP Address Source       : Static Address</span><br><span class="line">IP Address              : 10.1.6.200</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : e4:72:e2:c8:70:a5</span><br><span class="line">SNMP Community String   : TrapAdmin12<span class="comment">#$</span></span><br><span class="line">IP Header               : TTL=0x40 Flags=0x40 Precedence=0x00 TOS=0x10</span><br><span class="line">Default Gateway IP      : 10.1.6.254</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>Linux</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux主机加固</title>
+    <url>/posts/ebe6.html</url>
+    <content><![CDATA[<h2 id="0x01-前-言"><a href="#0x01-前-言" class="headerlink" title="0x01 前 言"></a>0x01 前 言</h2><p>Linux系统被应用于大部分企业的服务器上，因此在等保测评中主机加固也是必须要完成的一项环节。<br>由于在之后项目开始要进行主机加固，因此对linux的加固流程进行总结学习。<br>Linux的主机加固主要分为：账号安全、认证授权、协议安全、审计安全。简而言之，就是4A（统一安全管理平台解决方案）。</p>
+<p>这边就使用我自己kali的虚拟机进行试验学习。</p>
+<h2 id="0x02-基础加固"><a href="#0x02-基础加固" class="headerlink" title="0x02 基础加固"></a>0x02 基础加固</h2><h3 id="口令生存期"><a href="#口令生存期" class="headerlink" title="口令生存期"></a>口令生存期</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/login.defs</span><br><span class="line"><span class="comment">#在此处对密码的长度、时间、过期警告进行修改</span></span><br><span class="line">PASS_MAX_DAYS   90  <span class="comment">#密码最长过期天数</span></span><br><span class="line">PASS_MIN_DAYS   10   <span class="comment">#密码最小过期天数</span></span><br><span class="line">PASS_WARN_AGE   7   <span class="comment">#密码过期警告天数</span></span><br><span class="line">如果修改设置有最小长度也需要修改</span><br><span class="line">PASS_MIN_LEN    8   <span class="comment">#密码最小长度</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="口令复杂度（很重要）"><a href="#口令复杂度（很重要）" class="headerlink" title="口令复杂度（很重要）"></a>口令复杂度（很重要）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/pam.d/system-auth</span><br><span class="line"><span class="comment">#在文件中找到 password requisite  pam_cracklib.so</span></span><br><span class="line"><span class="comment">#将其修改为:</span></span><br><span class="line">password requisite  pam_cracklib.so try_first_pass retry=3 dcredit=-1 lcredit=-1 ucredit=-1 ocredit=-1 minlen=8</span><br></pre></td></tr></table></figure>
+
+<p>备注：至少包含一个数字、一个小写字母、一个大写字母、一个特殊字符、且密码长度&gt;&#x3D;8</p>
+<h3 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/version</span><br></pre></td></tr></table></figure>
+
+<h3 id="限制xx用户登录"><a href="#限制xx用户登录" class="headerlink" title="限制xx用户登录"></a>限制xx用户登录</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/hosts.deny</span><br><span class="line"><span class="comment">#添加内容：</span></span><br><span class="line">sshd : 192.168.1.1</span><br><span class="line"><span class="comment">#禁止192.168.1.1对服务器进行ssh的登陆</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="检查是否有其他uid-0的用户"><a href="#检查是否有其他uid-0的用户" class="headerlink" title="检查是否有其他uid&#x3D;0的用户"></a>检查是否有其他uid&#x3D;0的用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">awk -F “：” <span class="string">&#x27;($3==0)  &#123;print  $1&#125; &#x27;</span> /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<h3 id="登陆超时限制"><a href="#登陆超时限制" class="headerlink" title="登陆超时限制"></a>登陆超时限制</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> -p /etc/profile /etc/profile_bak <span class="comment">#（备份）</span></span><br><span class="line">gedit /etc/profile</span><br><span class="line"><span class="comment">#增加</span></span><br><span class="line">TMOUT=300</span><br><span class="line"><span class="built_in">export</span> TMOUT</span><br><span class="line"></span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export TMOUT=300&#x27;</span>&gt;&gt;/etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;readonly TMOUT&#x27;</span> &gt;&gt;/etc/profile</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h3 id="检查是否使用PAM认证模块禁止wheel组之外的用户su为root"><a href="#检查是否使用PAM认证模块禁止wheel组之外的用户su为root" class="headerlink" title="检查是否使用PAM认证模块禁止wheel组之外的用户su为root"></a>检查是否使用PAM认证模块禁止wheel组之外的用户su为root</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/pam.d/su</span><br><span class="line"><span class="comment">#新增</span></span><br><span class="line">auth          sufficient     pam_rootok.so</span><br><span class="line">auth          required     pam_wheel.so use_uid</span><br></pre></td></tr></table></figure>
+
+<p>备注：auth与sufficient之间由两个tab建隔开，sufficient与动态库路径之间使用一个tab建隔开</p>
+<h3 id="禁用无用账户"><a href="#禁用无用账户" class="headerlink" title="禁用无用账户"></a>禁用无用账户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/passwd <span class="comment">#查看口令文件，确认不必要的账号。</span></span><br><span class="line"></span><br><span class="line">passwd -l user <span class="comment"># 锁定不必要的账号</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="账户锁定"><a href="#账户锁定" class="headerlink" title="账户锁定"></a>账户锁定</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/pam.d/system-auth</span><br><span class="line"><span class="comment">#在文件中修改或者添加</span></span><br><span class="line">auth required pam_tally.so onerr=fail deny=3 unlock_time=7200</span><br><span class="line"></span><br><span class="line"><span class="comment">#锁定账户举例：</span></span><br><span class="line">passwd -l bin</span><br><span class="line">passwd -l sys</span><br><span class="line">passwd -l adm</span><br></pre></td></tr></table></figure>
+
+<h3 id="检查系统弱口令"><a href="#检查系统弱口令" class="headerlink" title="检查系统弱口令"></a>检查系统弱口令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">john /etc/shadow --single</span><br><span class="line">john /etc/shadow --wordlist=pass.dic</span><br></pre></td></tr></table></figure>
+
+<p>我这边有报错 就不展示了<br>使用passwd 用户 命令为用户设置复杂的密码</p>
+<h2 id="0x03-软件协议安全"><a href="#0x03-软件协议安全" class="headerlink" title="0x03 软件协议安全"></a>0x03 软件协议安全</h2><h3 id="openssh升级（按需做）"><a href="#openssh升级（按需做）" class="headerlink" title="openssh升级（按需做）"></a>openssh升级（按需做）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum update  openssh</span><br></pre></td></tr></table></figure>
+
+<h3 id="定时任务（防止病毒感染）"><a href="#定时任务（防止病毒感染）" class="headerlink" title="定时任务（防止病毒感染）"></a>定时任务（防止病毒感染）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#定时任务检查：</span></span><br><span class="line">crontab -l</span><br><span class="line"></span><br><span class="line"><span class="comment">#一次性任务检查：</span></span><br><span class="line">at -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="限制ssh登录（看是否需要）"><a href="#限制ssh登录（看是否需要）" class="headerlink" title="限制ssh登录（看是否需要）"></a>限制ssh登录（看是否需要）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line"><span class="comment">#查看PermitRootLogin是否为no</span></span><br><span class="line">PermitRootLogin no <span class="comment">#不允许root登陆</span></span><br><span class="line">Protocol 2 <span class="comment">#修改ssh使用的协议版本</span></span><br><span class="line">MaxAuthTries 3 <span class="comment">#修改允许密码错误次数</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;tty1&quot;</span> &gt; /etc/securetty</span><br><span class="line">hmod 700 /root</span><br></pre></td></tr></table></figure>
+
+<h3 id="限制su为root用户"><a href="#限制su为root用户" class="headerlink" title="限制su为root用户"></a>限制su为root用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/pam.d/su</span><br><span class="line"><span class="comment">#在头部添加</span></span><br><span class="line">auth required /lib/security/pam_wheel.so group=wheel</span><br></pre></td></tr></table></figure>
+
+<h3 id="禁止root用户登录ftp"><a href="#禁止root用户登录ftp" class="headerlink" title="禁止root用户登录ftp"></a>禁止root用户登录ftp</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#因为我的kali下没有这个文件，因此借鉴一下网上的</span></span><br><span class="line"><span class="built_in">cat</span> /etc/pam.d/vsftpd</span><br><span class="line">Auth required pam_listfile.so item=user sense=deny file=/etc/vsftpd/ftpusers onerr=succeed</span><br><span class="line"><span class="comment">#其中file=/etc/vsftpd/ftpusers即为当前系统上的ftpusers文件.</span></span><br><span class="line"><span class="built_in">echo</span>  “root”   &gt;&gt;   /etc/vsftpd/ftpusers</span><br></pre></td></tr></table></figure>
+
+<h3 id="防止flood攻击"><a href="#防止flood攻击" class="headerlink" title="防止flood攻击"></a>防止flood攻击</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit  /etc/sysctl.conf</span><br><span class="line"><span class="comment">#增加</span></span><br><span class="line">net.ipv4.tcp_syncookies = 1</span><br><span class="line">sysctl  -p</span><br></pre></td></tr></table></figure>
+
+<h3 id="禁ping"><a href="#禁ping" class="headerlink" title="禁ping"></a>禁ping</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/sys/net/ipv4/icmp_echo_igore_all</span><br></pre></td></tr></table></figure>
+
+<h3 id="检查异常进程"><a href="#检查异常进程" class="headerlink" title="检查异常进程"></a>检查异常进程</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps aux|<span class="built_in">sort</span> -rn -k +3|<span class="built_in">head</span></span><br><span class="line"><span class="comment">#检查cpu占用前10</span></span><br><span class="line">ps aux|<span class="built_in">sort</span> -rn -k +4|<span class="built_in">head</span></span><br><span class="line"><span class="comment">#检查内存占用前10</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="关闭无效的服务及端口"><a href="#关闭无效的服务及端口" class="headerlink" title="关闭无效的服务及端口"></a>关闭无效的服务及端口</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#比如邮箱</span></span><br><span class="line">service postfix status</span><br><span class="line">chkconfig --del postfix</span><br><span class="line">chkconfig postfix off</span><br><span class="line"></span><br><span class="line"><span class="comment">#比如cpus</span></span><br><span class="line">service cups status</span><br><span class="line">chkconfig --del cups</span><br><span class="line">chkconfig cups off</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置防火墙策略"><a href="#设置防火墙策略" class="headerlink" title="设置防火墙策略"></a>设置防火墙策略</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#或者用防火墙策略：</span></span><br><span class="line">service iptables status</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;请根据用户实际业务端口占用等情况进行设置！&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/sysconfig/iptables <span class="comment">#添加如下策略</span></span><br><span class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 8080 -j ACCEPT</span><br><span class="line">-A INPUT -m state --state NEW -m udp -p udp --dport 8080 -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+<p>以下举例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iptables -I INPUT -s 22.48.11.11 -j DROP</span><br><span class="line"><span class="comment"># 22.48.11.11的包全部屏蔽</span></span><br><span class="line">iptables -I INPUT -s 22.48.11.0/24 -j DROP</span><br><span class="line"><span class="comment">#22.48.11.1到22.48.11.255的访问全部屏蔽</span></span><br><span class="line">iptables -I INPUT -s 192.168.1.1 -p tcp --dport 80 -j DROP</span><br><span class="line"><span class="comment"># 192.168.1.1的80端口的访问全部屏蔽</span></span><br><span class="line">iptables -I INPUT -s 192.168.1.0/24 -p tcp --dport 80 -j DROP</span><br><span class="line"><span class="comment">#192.168.1.1到192.168.1.255的80端口的访问全部屏蔽</span></span><br><span class="line">service iptabels restart</span><br><span class="line"><span class="comment">#重启防火墙</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="设置历史记录数量"><a href="#设置历史记录数量" class="headerlink" title="设置历史记录数量"></a>设置历史记录数量</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /etc/profile /etc/profile_xu_bak <span class="comment">#（备份）</span></span><br><span class="line">sed -i s/<span class="string">&#x27;HISTSIZE=1000&#x27;</span>/<span class="string">&#x27;HISTSIZE=5000&#x27;</span>/g /etc/profile  <span class="comment">#（修改）</span></span><br><span class="line"><span class="built_in">cat</span> /etc/profile |grep HISTSIZE|grep -v <span class="built_in">export</span>   <span class="comment">#（检查）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="配置用户最小权限"><a href="#配置用户最小权限" class="headerlink" title="配置用户最小权限"></a>配置用户最小权限</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 644 /etc/passwd</span><br><span class="line"><span class="built_in">chmod</span> 400 /etc/shadow</span><br><span class="line"><span class="built_in">chmod</span> 644 /etc/group</span><br></pre></td></tr></table></figure>
+
+<h3 id="文件与目录缺省权限控制"><a href="#文件与目录缺省权限控制" class="headerlink" title="文件与目录缺省权限控制"></a>文件与目录缺省权限控制</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> /etc/profile /etc/profile.bak  <span class="comment">#（备份）</span></span><br><span class="line">gedit  /etc/profile</span><br><span class="line"><span class="comment">#增加</span></span><br><span class="line"><span class="built_in">umask</span> 027</span><br><span class="line"><span class="built_in">source</span>  /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x04-日志审计"><a href="#0x04-日志审计" class="headerlink" title="0x04 日志审计"></a>0x04 日志审计</h2><h3 id="启用远程日志功能"><a href="#启用远程日志功能" class="headerlink" title="启用远程日志功能"></a>启用远程日志功能</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit /etc/rsyslog.conf</span><br><span class="line">*.*         @Syslog日志服务器IP</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：* 和@之间存在的是tab键，非空格。</p>
+</blockquote>
+<h3 id="检查是否记录安全事件日志"><a href="#检查是否记录安全事件日志" class="headerlink" title="检查是否记录安全事件日志"></a>检查是否记录安全事件日志</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit  /etc/syslog.conf 或者 /etc/rsyslog.conf</span><br><span class="line"><span class="comment">#在文件中加入如下内容:</span></span><br><span class="line">*.err;kern.debug;daemon.notice     /var/log/messages</span><br><span class="line"><span class="built_in">chmod</span> 640 /var/log/messages</span><br><span class="line">service rsyslog restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="日志保留半年以上"><a href="#日志保留半年以上" class="headerlink" title="日志保留半年以上"></a>日志保留半年以上</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span>/etc/logrotate.conf /etc/logrotate.conf_xu_bak   <span class="comment">#（备份）</span></span><br><span class="line">sed -i s/<span class="string">&#x27;rotate 4&#x27;</span>/<span class="string">&#x27;rotate 12&#x27;</span>/g /etc/logrotate.conf   <span class="comment">#（修改）</span></span><br><span class="line">service syslog restart    <span class="comment">#（重启）</span></span><br><span class="line"><span class="built_in">cat</span> /etc/logrotate.conf |grep -v <span class="string">&#x27;#&#x27;</span> |grep rotate    <span class="comment">#（检查）</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>信息安全</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>主机加固</tag>
+        <tag>PAM认证</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux iostat命令详解</title>
+    <url>/posts/c450a840.html</url>
+    <content><![CDATA[<p>iostat是I&#x2F;O statistics（输入&#x2F;输出统计）的缩写，iostat工具将对系统的磁盘操作活动进行监视。它的特点是汇报磁盘活动统计情况，同时也会汇报出CPU使用情况。iostat也有一个弱点，就是它不能对某个进程进行深入分析，仅对系统的整体情况进行分析</p>
+<h2 id="常见命令展示"><a href="#常见命令展示" class="headerlink" title="常见命令展示"></a>常见命令展示</h2><h3 id="iostat-安装"><a href="#iostat-安装" class="headerlink" title="iostat 安装"></a>iostat 安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># iostat属于sysstat软件包。可以直接安装。</span></span><br><span class="line">yum install sysstat</span><br></pre></td></tr></table></figure>
+
+<h3 id="显示所有设备负载情况"><a href="#显示所有设备负载情况" class="headerlink" title="显示所有设备负载情况"></a>显示所有设备负载情况</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@i-003F281E ~]<span class="comment"># iostat</span></span><br><span class="line">Linux 3.10.0-1062.4.1.el7.x86_64 (i-003F281E) 	2020年03月05日 	_x86_64_	(4 CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %<span class="built_in">nice</span> %system %iowait  %steal   %idle</span><br><span class="line">           1.65    0.00    0.58    0.38    0.01   97.38</span><br><span class="line"></span><br><span class="line">Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn</span><br><span class="line">vda              10.84       126.28      1034.29     317347    2599151</span><br><span class="line">dm-0             11.81       120.22      1011.98     302106    2543083</span><br><span class="line">dm-1              0.05         1.29         0.00       3236          0</span><br><span class="line">dm-2              0.03         0.43         0.81       1090       2048</span><br></pre></td></tr></table></figure>
+
+<p>cpu属性值说明：</p>
+<p>%user：CPU处在用户模式下的时间百分比。</p>
+<p>%nice：CPU处在带NICE值的用户模式下的时间百分比。</p>
+<p>%system：CPU处在系统模式下的时间百分比。</p>
+<p>%iowait：CPU等待输入输出完成时间的百分比。</p>
+<p>%steal：管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比。</p>
+<p>%idle：CPU空闲时间百分比。</p>
+<p>备注：</p>
+<p>如果%iowait的值过高，表示硬盘存在I&#x2F;O瓶颈</p>
+<p>如果%idle值高，表示CPU较空闲</p>
+<p>如果%idle值高但系统响应慢时，可能是CPU等待分配内存，应加大内存容量。</p>
+<p>如果%idle值持续低于10，表明CPU处理能力相对较低，系统中最需要解决的资源是CPU。</p>
+<p>cpu属性值说明:</p>
+<p>tps：该设备每秒的传输次数</p>
+<p>kB_read&#x2F;s：每秒从设备（drive expressed）读取的数据量；</p>
+<p>kB_wrtn&#x2F;s：每秒向设备（drive expressed）写入的数据量；</p>
+<p>kB_read：  读取的总数据量；</p>
+<p>kB_wrtn：写入的总数量数据量；</p>
+<h3 id="定时显示所有信息"><a href="#定时显示所有信息" class="headerlink" title="定时显示所有信息"></a>定时显示所有信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#【每隔2秒刷新显示，且显示3次】</span></span><br><span class="line">iostat 2  3</span><br></pre></td></tr></table></figure>
+
+<h3 id="显示指定磁盘信息"><a href="#显示指定磁盘信息" class="headerlink" title="显示指定磁盘信息"></a>显示指定磁盘信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iostat -d /dev/sda</span><br></pre></td></tr></table></figure>
+
+<h3 id="显示tty和Cpu信息"><a href="#显示tty和Cpu信息" class="headerlink" title="显示tty和Cpu信息"></a>显示tty和Cpu信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iostat -t</span><br></pre></td></tr></table></figure>
+
+<h3 id="以M为单位显示所有信息"><a href="#以M为单位显示所有信息" class="headerlink" title="以M为单位显示所有信息"></a>以M为单位显示所有信息</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iostat -m</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看设备使用率（-util）、响应时间（await）"><a href="#查看设备使用率（-util）、响应时间（await）" class="headerlink" title="查看设备使用率（%util）、响应时间（await）"></a>查看设备使用率（%util）、响应时间（await）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#  【-d 显示磁盘使用情况，-x 显示详细信息】</span></span><br><span class="line"><span class="comment">#  d: detail</span></span><br><span class="line">iostat -d -x -k 1 1</span><br><span class="line"></span><br><span class="line">[root@i-003F281E ~]<span class="comment"># iostat -d -x -k 1 1</span></span><br><span class="line">Linux 3.10.0-1062.4.1.el7.x86_64 (i-003F281E) 	2020年03月05日 	_x86_64_	(4 CPU)</span><br><span class="line"></span><br><span class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">vda               0.01     1.86    4.47    6.09   123.00  1007.42   214.01     0.70   92.65    5.20  156.86   2.58   2.72</span><br><span class="line">dm-0              0.00     0.00    4.21    7.31   117.09   985.69   191.59     1.30  112.62    5.71  174.19   2.33   2.68</span><br><span class="line">dm-1              0.00     0.00    0.05    0.00     1.25     0.00    50.96     0.00    1.35    1.35    0.00   0.96   0.00</span><br><span class="line">dm-2              0.00     0.00    0.03    0.00     0.42     0.79    72.98     0.00   10.29    2.84  131.00   3.81   0.01</span><br></pre></td></tr></table></figure>
+
+<p>说明：</p>
+<p>rrqm&#x2F;s：  每秒进行 merge 的读操作数目.即 delta(rmerge)&#x2F;s</p>
+<p>wrqm&#x2F;s： 每秒进行 merge 的写操作数目.即 delta(wmerge)&#x2F;s</p>
+<p>%util： 一秒中有百分之多少的时间用于 I&#x2F;O</p>
+<p>如果%util接近100%，说明产生的I&#x2F;O请求太多，I&#x2F;O系统已经满负荷</p>
+<p>   idle小于70% IO压力就较大了，一般读取速度有较多的wait。</p>
+<h3 id="查看cpu状态"><a href="#查看cpu状态" class="headerlink" title="查看cpu状态"></a>查看cpu状态</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">iostat -c 1 1</span><br><span class="line"></span><br><span class="line">[root@i-003F281E ~]<span class="comment"># iostat -c 1 1</span></span><br><span class="line">Linux 3.10.0-1062.4.1.el7.x86_64 (i-003F281E) 	2020年03月05日 	_x86_64_	(4 CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %<span class="built_in">nice</span> %system %iowait  %steal   %idle</span><br><span class="line">           1.57    0.00    0.55    0.36    0.01   97.51</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux命令</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>iostat</tag>
       </tags>
   </entry>
   <entry>
