@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Prometheus配置基本授权-账号密码登录 | 攀岩之鹿</title><meta name="author" content="Jeremy Peng"><meta name="copyright" content="Jeremy Peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="安装好Prometheus后发现我们打开地址便可访问无安全性，此时我们想到官方指南中的basic_auth。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus配置基本授权-账号密码登录">
+<meta property="og:url" content="https://aisk.cc/posts/a402dbea.html">
+<meta property="og:site_name" content="攀岩之鹿">
+<meta property="og:description" content="安装好Prometheus后发现我们打开地址便可访问无安全性，此时我们想到官方指南中的basic_auth。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s11.ax1x.com/2024/01/05/pixTA5d.jpg">
+<meta property="article:published_time" content="2025-10-17T06:37:04.168Z">
+<meta property="article:modified_time" content="2025-10-17T06:37:04.168Z">
+<meta property="article:author" content="Jeremy Peng">
+<meta property="article:tag" content="Prometheus">
+<meta property="article:tag" content="basic auth">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s11.ax1x.com/2024/01/05/pixTA5d.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Prometheus配置基本授权-账号密码登录",
+  "url": "https://aisk.cc/posts/a402dbea.html",
+  "image": "https://s11.ax1x.com/2024/01/05/pixTA5d.jpg",
+  "datePublished": "2025-10-17T06:37:04.168Z",
+  "dateModified": "2025-10-17T06:37:04.168Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Jeremy Peng",
+      "url": "https://aisk.cc"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/web-logo.png"><link rel="canonical" href="https://aisk.cc/posts/a402dbea.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Prometheus配置基本授权-账号密码登录',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="攀岩之鹿" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/photo/"><i class="fa-fw fa-fw fas fa-images"></i><span> 图片</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw fas fa-video"></i><span> 视频</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-link"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" target="_blank" rel="noopener external nofollow noreferrer" href="https://192.168.9.252:5001"><i class="fa-fw fas fa-folder-open"></i><span> NAS</span></a></li><li><a class="site-page child" target="_blank" rel="noopener external nofollow noreferrer" href="https://nav.aisk.cc"><i class="fa-fw fas fa-link"></i><span> 导航</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s11.ax1x.com/2024/01/05/pixTA5d.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/web-logo.png" alt="Logo"><span class="site-name">攀岩之鹿</span></a><a class="nav-page-title" href="/"><span class="site-name">Prometheus配置基本授权-账号密码登录</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/photo/"><i class="fa-fw fa-fw fas fa-images"></i><span> 图片</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw fas fa-video"></i><span> 视频</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-link"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" target="_blank" rel="noopener external nofollow noreferrer" href="https://192.168.9.252:5001"><i class="fa-fw fas fa-folder-open"></i><span> NAS</span></a></li><li><a class="site-page child" target="_blank" rel="noopener external nofollow noreferrer" href="https://nav.aisk.cc"><i class="fa-fw fas fa-link"></i><span> 导航</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Prometheus配置基本授权-账号密码登录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-17T06:37:04.168Z" title="发表于 2025-10-17 06:37:04">2025-10-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-17T06:37:04.168Z" title="更新于 2025-10-17 06:37:04">2025-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%80%E4%BD%93%E5%8C%96%E7%9B%91%E6%B5%8B/">一体化监测</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>安装好Prometheus后发现我们打开地址便可访问无安全性，此时我们想到官方指南中的basic_auth。</p>
+<p>参考指南：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://prometheus.io/docs/guides/basic-auth/">Securing Prometheus API and UI endpoints using basic auth | Prometheus</a></p>
+<h2 id="Prometheus配置基本授权"><a href="#Prometheus配置基本授权" class="headerlink" title="Prometheus配置基本授权"></a>Prometheus配置基本授权</h2><p>假设您希望要求访问 Prometheus 实例的所有用户提供用户名和密码。对于此示例，请用作用户名并选择您想要的任何密码。</p>
+<h3 id="生成密码"><a href="#生成密码" class="headerlink" title="生成密码"></a>生成密码</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ htpasswd -nBC 12 <span class="string">&#x27;&#x27;</span> | <span class="built_in">tr</span> -d <span class="string">&#x27;:\n&#x27;</span>   </span><br><span class="line">New password: </span><br><span class="line">Re-<span class="built_in">type</span> new password:</span><br><span class="line">$2b$12<span class="variable">$hNf2lSsxfm0</span>.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay</span><br></pre></td></tr></table></figure>
+
+<p>在此示例中，我使用“test”作为密码。</p>
+<p>将该密码保存在某个地方，我们将在接下来的步骤中使用它！</p>
+<h3 id="创建web-yml"><a href="#创建web-yml" class="headerlink" title="创建web.yml"></a>创建web.yml</h3><p>让我们创建一个web.yml文件， 内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">basic_auth_users:</span><br><span class="line">    admin: $2b$12<span class="variable">$hNf2lSsxfm0</span>.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay</span><br></pre></td></tr></table></figure>
+
+<p>您可以使用以下命令验证该文件 <code>promtool check web-config web.yml</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ promtool check web-config web.yml</span><br><span class="line">web.yml SUCCESS</span><br></pre></td></tr></table></figure>
+
+<p>您可以向文件添加多个用户。</p>
+<h3 id="启动-Prometheus"><a href="#启动-Prometheus" class="headerlink" title="启动 Prometheus"></a>启动 Prometheus</h3><p>您可以使用 Web 配置文件启动 prometheus，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ prometheus --web.config.file=web.yml</span><br></pre></td></tr></table></figure>
+
+<p>修改启动配置文件，添加参数 <code>--web.config.file=web.yml</code> 如systemctl文件所示：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim prometheus.yml</span><br><span class="line">[Unit]</span><br><span class="line">Description=<span class="string">&quot;prometheus&quot;</span></span><br><span class="line">Documentation=https://prometheus.io/</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/opt/prometheus/prometheus  \</span><br><span class="line">      --config.file=/opt/prometheus/prometheus.yml \</span><br><span class="line">      --web.config.file=/opt/prometheus/web.yml \</span><br><span class="line">      --storage.tsdb.path=/opt/data \</span><br><span class="line">      --storage.tsdb.retention.time=90d \</span><br><span class="line">      --web.enable-lifecycle --enable-feature=remote-write-receiver \</span><br><span class="line">      --query.lookback-delta=2m </span><br><span class="line">Restart=on-failure</span><br><span class="line">SuccessExitStatus=0</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line">StandardOutput=syslog</span><br><span class="line">StandardError=syslog</span><br><span class="line">SyslogIdentifier=prometheus</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>您可以使用 cURL 与您的设置进行交互。尝试以下请求：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl --<span class="built_in">head</span> http://localhost:9090/graph</span><br></pre></td></tr></table></figure>
+
+<p>这将返回响应，因为您未能提供有效的用户名和密码。401 Unauthorized</p>
+<p>要使用基本身份验证（例如端点）成功访问 Prometheus 端点，请使用标志提供正确的用户名，并在出现提示时提供密码：<code>/metrics -u</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -u admin http://localhost:9090/metrics</span><br><span class="line">Enter host password <span class="keyword">for</span> user <span class="string">&#x27;admin&#x27;</span>:</span><br></pre></td></tr></table></figure>
+
+<p>这应该返回 Prometheus 指标输出，它应该如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># HELP go_gc_duration_seconds A summary of the GC invocation durations.</span></span><br><span class="line"><span class="comment"># TYPE go_gc_duration_seconds summary</span></span><br><span class="line">go_gc_duration_seconds&#123;quantile=<span class="string">&quot;0&quot;</span>&#125; 0.0001343</span><br><span class="line">go_gc_duration_seconds&#123;quantile=<span class="string">&quot;0.25&quot;</span>&#125; 0.0002032</span><br><span class="line">go_gc_duration_seconds&#123;quantile=<span class="string">&quot;0.5&quot;</span>&#125; 0.0004485</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="Node-exporter基本授权"><a href="#Node-exporter基本授权" class="headerlink" title="Node_exporter基本授权"></a>Node_exporter基本授权</h2><p>因安全需要，现在对 node_exporter 进行配置以支持 TLS 和 Basic Auth。</p>
+<blockquote>
+<p>Node_exporter 1.0 以上版本才支持 TLS 和 Basic Auth</p>
+</blockquote>
+<h3 id="Node-exporter-配置"><a href="#Node-exporter-配置" class="headerlink" title="Node_exporter 配置"></a>Node_exporter 配置</h3><p><strong>准备工作</strong></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/prometheus/node_exporter">prometheus&#x2F;node_exporter</a></p>
+<p>下载安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ wget https://github.com/prometheus/node_exporter/releases/download/v1.9.1/node_exporter-1.9.1.linux-amd64.tar.gz</span><br><span class="line">$ tar xf node_exporter-1.9.1.linux-amd64.tar.gz</span><br><span class="line">$ <span class="built_in">mv</span> node_exporter-1.9.1.linux-amd64 /usr/local/node_exporter</span><br></pre></td></tr></table></figure>
+
+<p><strong>生成TLS证书</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout node_exporter.key -out node_exporter.crt -subj <span class="string">&quot;/C=CN/ST=Beijing/L=Beijing/O=Moelove.info/CN=localhost&quot;</span></span><br><span class="line">Generating a RSA private key</span><br><span class="line">...................+++++</span><br><span class="line">.........................................................................................................................................................................................................................................................................+++++</span><br><span class="line">writing new private key to <span class="string">&#x27;node_exporter.key&#x27;</span></span><br><span class="line">-----</span><br><span class="line"></span><br><span class="line">$ ll</span><br><span class="line">total 16</span><br><span class="line">drwxr-xr-x  2 root root 4096 Dec  1 14:58 ./</span><br><span class="line">drwx------ 27 root root 4096 Dec  1 14:58 ../</span><br><span class="line">-rw-r--r--  1 root root 1310 Dec  1 14:58 node_exporter.crt</span><br><span class="line">-rw-------  1 root root 1704 Dec  1 14:58 node_exporter.key</span><br></pre></td></tr></table></figure>
+
+<p>通过上面的步骤，我们得到了 node_exporter.crt 和node_exporter.key 这两个文件。</p>
+<p><strong>basic auth 认证生成</strong></p>
+<p>安装 htpasswd 来生成密码 hash</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ apt install apache2-utils -y           <span class="comment">#Ubuntu</span></span><br><span class="line"></span><br><span class="line">$ yum install httpd-tools -y             <span class="comment">#centos</span></span><br></pre></td></tr></table></figure>
+
+<p>在 Node_exporter 目录下执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ htpasswd -nBC 12 <span class="string">&#x27;&#x27;</span> | <span class="built_in">tr</span> -d <span class="string">&#x27;:\n&#x27;</span>   </span><br><span class="line">New password: </span><br><span class="line">Re-<span class="built_in">type</span> new password:</span><br><span class="line">$2b$12<span class="variable">$hNf2lSsxfm0</span>.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay</span><br></pre></td></tr></table></figure>
+
+<p>在此示例中，我使用“test”作为密码。</p>
+<h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><p>将前面生成的 node_exporter.crt 和node_exporter.key 文件复制到 Node_exporter 解压目录下。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cp</span> /usr/local/node_exporter/node_exporter.* .</span><br><span class="line">$ ll</span><br><span class="line">total 19352</span><br><span class="line">drwxr-xr-x 2 root root     4096 Dec  1 15:12 ./</span><br><span class="line">drwxr-xr-x 5 root root     4096 Dec  1 15:07 ../</span><br><span class="line">-rw-r--r-- 1 3434 3434    11357 Nov 30 03:05 LICENSE</span><br><span class="line">-rw-r--r-- 1 3434 3434      463 Nov 30 03:05 NOTICE</span><br><span class="line">-rwxr-xr-x 1 3434 3434 19779640 Nov 30 02:59 node_exporter*</span><br><span class="line">-rw-r--r-- 1 root root     1310 Dec  1 15:12 node_exporter.crt</span><br><span class="line">-rw------- 1 root root     1704 Dec  1 15:12 node_exporter.key</span><br></pre></td></tr></table></figure>
+
+<p>编写配置文件，并保存为 <code>config.yaml</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tls_server_config:</span><br><span class="line">  cert_file: node_exporter.crt</span><br><span class="line">  key_file: node_exporter.key</span><br><span class="line">basic_auth_users:</span><br><span class="line">  <span class="comment"># 当前设置的用户名为 root ， 可以设置多个</span></span><br><span class="line">  root: $2b$12<span class="variable">$hNf2lSsxfm0</span>.i4a.1kVpSOVyBCfIB51VRjgBUyv6kdnyTlgWj81Ay</span><br></pre></td></tr></table></figure>
+
+<p>启动</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">nohup</span> ./node_exporter --web.listen-address=:9100 --web.config.file=config.yaml &amp;</span><br></pre></td></tr></table></figure>
+
+<p><strong>验证</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ curl http://localhost:39100/metrics </span><br><span class="line">Client sent an HTTP request to an HTTPS server.</span><br><span class="line">root@zabbix:/opt/node_exporter# curl https://localhost:39100/metrics </span><br><span class="line">curl: (60) SSL certificate problem: self signed certificate</span><br><span class="line">More details here: https://curl.haxx.se/docs/sslcerts.html</span><br><span class="line"></span><br><span class="line">curl failed to verify the legitimacy of the server and therefore could not</span><br><span class="line">establish a secure connection to it. To learn more about this situation and</span><br><span class="line">how to fix it, please visit the web page mentioned above.</span><br></pre></td></tr></table></figure>
+
+<p>可以看到不能直接访问了，下面带上证书及用户密码再次测试</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ curl -u prometheus -s  --cacert node_exporter.crt https://localhost:39100/metrics |grep node_exporter_build_info</span><br><span class="line">Enter host password <span class="keyword">for</span> user <span class="string">&#x27;prometheus&#x27;</span>:</span><br><span class="line"><span class="comment"># HELP node_exporter_build_info A metric with a constant &#x27;1&#x27; value labeled by version, revision, branch, and goversion from which node_exporter was built.</span></span><br><span class="line"><span class="comment"># TYPE node_exporter_build_info gauge</span></span><br><span class="line">node_exporter_build_info&#123;branch=<span class="string">&quot;HEAD&quot;</span>,goversion=<span class="string">&quot;go1.19.3&quot;</span>,revision=<span class="string">&quot;1b48970ffcf5630534fb00bb0687d73c66d1c959&quot;</span>,version=<span class="string">&quot;1.5.0&quot;</span>&#125; 1</span><br></pre></td></tr></table></figure>
+
+<h3 id="Prometheus-配置"><a href="#Prometheus-配置" class="headerlink" title="Prometheus 配置"></a>Prometheus 配置</h3><p>下载最新版解压，并将前面生成的 node_exporter.crt 和node_exporter.key 文件复制到该目录下。在 prometheus.yml 加入如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">global:</span><br><span class="line">  scrape_interval:     15s </span><br><span class="line">  evaluation_interval: 15s </span><br><span class="line"></span><br><span class="line">scrape_configs:</span><br><span class="line">  - job_name: <span class="string">&#x27;prometheus&#x27;</span></span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: [<span class="string">&#x27;localhost:9090&#x27;</span>]</span><br><span class="line"></span><br><span class="line">  - job_name: <span class="string">&#x27;node_exporter&#x27;</span></span><br><span class="line">    scheme: https</span><br><span class="line">    tls_config:</span><br><span class="line">      ca_file: node_exporter.crt</span><br><span class="line">      insecure_skip_verify: <span class="literal">true</span></span><br><span class="line">    basic_auth:</span><br><span class="line">      username: root</span><br><span class="line">      password: <span class="built_in">test</span></span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: [<span class="string">&#x27;localhost:9100&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>启动 Prometheus 即可。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://aisk.cc">Jeremy Peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://aisk.cc/posts/a402dbea.html">https://aisk.cc/posts/a402dbea.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://aisk.cc" target="_blank">攀岩之鹿</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Prometheus/">Prometheus</a><a class="post-meta__tags" href="/tags/basic-auth/">basic auth</a></div><div class="post-share"><div class="social-share" data-image="https://s11.ax1x.com/2024/01/05/pixTA5d.jpg" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/7a80853b.html" title="DockerHub国内镜像源列表"><img class="cover" src="https://s11.ax1x.com/2024/01/05/pixT9KK.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">DockerHub国内镜像源列表</div></div><div class="info-2"><div class="info-item-1">0x01 DockerHub国内镜像源列表此列表只收录无需限定条件的DockerHub镜像源，感谢这些公益服务者。 2024年6月18日 亲测可用    DockerHub镜像仓库 镜像加速器地址    Docker镜像加速站 https://hub.uuuadc.top/    docker.1panel.live    hub.rat.dev   DockerHub 镜像加速代理 https://docker.anyhub.us.kg    https://docker.chenby.cn    https://dockerhub.jobcher.com/   镜像使用说明 https://dockerhub.icu   Docker镜像加速站 https://docker.ckyl.me   镜像使用说明 https://docker.awsl9527.cn   镜像使用说明 https://docker.hpcloud.cloud   AtomHub 可信镜像仓库平台（只包含基础镜像，共336个） https://atomhub.openatom.cn   DaoClou...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Jeremy Peng</div><div class="author-info-description">攀岩之鹿-分享运维技术点滴，提供系统安全运维相关经验及技术；打造一个最全、最实用的专业运维分享博客。留下运维点滴记忆，悠悠岁月慢慢回味。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Stack-Baize"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Stack-Baize" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:aistack#163.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">专注于运维技术，记录点滴记忆。留下运维点滴记忆，悠悠岁月慢慢回味。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Prometheus%E9%85%8D%E7%BD%AE%E5%9F%BA%E6%9C%AC%E6%8E%88%E6%9D%83"><span class="toc-number">1.</span> <span class="toc-text">Prometheus配置基本授权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%AF%86%E7%A0%81"><span class="toc-number">1.1.</span> <span class="toc-text">生成密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAweb-yml"><span class="toc-number">1.2.</span> <span class="toc-text">创建web.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8-Prometheus"><span class="toc-number">1.3.</span> <span class="toc-text">启动 Prometheus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.</span> <span class="toc-text">测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-exporter%E5%9F%BA%E6%9C%AC%E6%8E%88%E6%9D%83"><span class="toc-number">2.</span> <span class="toc-text">Node_exporter基本授权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-exporter-%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">Node_exporter 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">修改配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prometheus-%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.</span> <span class="toc-text">Prometheus 配置</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/a402dbea.html" title="Prometheus配置基本授权-账号密码登录"><img src="https://s11.ax1x.com/2024/01/05/pixTA5d.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Prometheus配置基本授权-账号密码登录"/></a><div class="content"><a class="title" href="/posts/a402dbea.html" title="Prometheus配置基本授权-账号密码登录">Prometheus配置基本授权-账号密码登录</a><time datetime="2025-10-17T06:37:04.168Z" title="发表于 2025-10-17 06:37:04">2025-10-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/7a80853b.html" title="DockerHub国内镜像源列表"><img src="https://s11.ax1x.com/2024/01/05/pixT9KK.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DockerHub国内镜像源列表"/></a><div class="content"><a class="title" href="/posts/7a80853b.html" title="DockerHub国内镜像源列表">DockerHub国内镜像源列表</a><time datetime="2024-08-07T10:00:00.000Z" title="发表于 2024-08-07 10:00:00">2024-08-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/76b2.html" title="Linux磁盘分区并挂载"><img src="https://s11.ax1x.com/2024/01/05/pixTUMV.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux磁盘分区并挂载"/></a><div class="content"><a class="title" href="/posts/76b2.html" title="Linux磁盘分区并挂载">Linux磁盘分区并挂载</a><time datetime="2021-10-20T11:05:00.000Z" title="发表于 2021-10-20 11:05:00">2021-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1c3a.html" title="Redis6.0.10编译安装配置"><img src="https://s11.ax1x.com/2024/01/05/pixox81.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis6.0.10编译安装配置"/></a><div class="content"><a class="title" href="/posts/1c3a.html" title="Redis6.0.10编译安装配置">Redis6.0.10编译安装配置</a><time datetime="2021-02-10T11:00:00.000Z" title="发表于 2021-02-10 11:00:00">2021-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/15ac.html" title="Hexo版本升级指南"><img src="https://s11.ax1x.com/2024/01/05/pixTA5d.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo版本升级指南"/></a><div class="content"><a class="title" href="/posts/15ac.html" title="Hexo版本升级指南">Hexo版本升级指南</a><time datetime="2021-02-09T11:00:00.000Z" title="发表于 2021-02-09 11:00:00">2021-02-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2025 By Jeremy Peng</span></div><div class="footer_custom_text">我的其它站点：<a href="https://aisk.cc/" target="_blank" rel="noopener">AiSk.cc</a>、<a href="https://nav.aisk.cc" target="_blank" rel="noopener external nofollow noreferrer">AiSk 导航</a>、<a href="https://baize.cc/" target="_blank" rel="noopener external nofollow noreferrer">Baize.cc</a><br>留下运维点滴记忆，悠悠岁月慢慢回味。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
