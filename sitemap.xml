@@ -2,33 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://aisk.cc/video/index.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/link/index.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/movies/index.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://aisk.cc/photo/index.html</loc>
     
     <lastmod>2025-11-10</lastmod>
@@ -39,6 +12,15 @@
   
   <url>
     <loc>https://aisk.cc/tags/index.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/video/index.html</loc>
     
     <lastmod>2025-11-10</lastmod>
     
@@ -65,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://aisk.cc/posts/688b.html</loc>
+    <loc>https://aisk.cc/link/index.html</loc>
     
     <lastmod>2025-11-10</lastmod>
     
@@ -74,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://aisk.cc/posts/e4ca.html</loc>
+    <loc>https://aisk.cc/movies/index.html</loc>
     
     <lastmod>2025-11-10</lastmod>
     
@@ -137,60 +119,6 @@
   </url>
   
   <url>
-    <loc>https://aisk.cc/posts/ios.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/posts/991a.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/posts/96f0.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/posts/kms.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/posts/6308523a.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/posts/d931.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://aisk.cc/posts/fa9f.html</loc>
     
     <lastmod>2025-11-10</lastmod>
@@ -237,6 +165,96 @@
   
   <url>
     <loc>https://aisk.cc/posts/ebe6.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/688b.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/e4ca.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/15ac.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/ios.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/991a.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/96f0.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/kms.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/6308523a.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/632e.html</loc>
+    
+    <lastmod>2025-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/posts/d931.html</loc>
     
     <lastmod>2025-11-10</lastmod>
     
@@ -308,25 +326,7 @@
   </url>
   
   <url>
-    <loc>https://aisk.cc/posts/632e.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://aisk.cc/posts/3eeb.html</loc>
-    
-    <lastmod>2025-11-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/posts/15ac.html</loc>
     
     <lastmod>2025-11-10</lastmod>
     
@@ -501,6 +501,20 @@
   </url>
   
   <url>
+    <loc>https://aisk.cc/tags/npm/</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/tags/hexo/</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://aisk.cc/tags/OS/</loc>
     <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -558,6 +572,34 @@
   
   <url>
     <loc>https://aisk.cc/tags/CPU/</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/tags/Hexo/</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/tags/GitHub/</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/tags/%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://aisk.cc/tags/%E5%9F%9F%E5%90%8D/</loc>
     <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -640,48 +682,6 @@
     <priority>0.2</priority>
   </url>
   
-  <url>
-    <loc>https://aisk.cc/tags/npm/</loc>
-    <lastmod>2025-11-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/tags/hexo/</loc>
-    <lastmod>2025-11-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/tags/Hexo/</loc>
-    <lastmod>2025-11-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/tags/GitHub/</loc>
-    <lastmod>2025-11-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/tags/%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2025-11-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/tags/%E5%9F%9F%E5%90%8D/</loc>
-    <lastmod>2025-11-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
 
   
   <url>
@@ -727,6 +727,13 @@
   </url>
   
   <url>
+    <loc>https://aisk.cc/categories/%E7%BD%91%E7%AB%99%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://aisk.cc/categories/%E6%B8%B8%E8%AE%B0%E6%95%A3%E8%AE%B0/</loc>
     <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -763,13 +770,6 @@
   
   <url>
     <loc>https://aisk.cc/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2025-11-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://aisk.cc/categories/%E7%BD%91%E7%AB%99%E4%BC%98%E5%8C%96/</loc>
     <lastmod>2025-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
