@@ -10,7 +10,7 @@
   <rights>All rights reserved 2026, Jeremy Peng</rights>
   <subtitle>留下运维点滴记忆，悠悠岁月慢慢回味。</subtitle>
   <title>攀岩之鹿</title>
-  <updated>2026-06-16T01:52:17.720Z</updated>
+  <updated>2026-06-16T02:05:32.737Z</updated>
   <entry>
     <author>
       <name>Jeremy Peng</name>
@@ -29,7 +29,7 @@
 <p]]>
     </summary>
     <title>Linux操作系统组合软阵列</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.737Z</updated>
   </entry>
   <entry>
     <author>
@@ -49,7 +49,7 @@
 <p>参考指南：<a href="https://prometheus.io/docs/guides/basic-auth/">Securing Prome]]>
     </summary>
     <title>Prometheus配置基本授权-账号密码登录</title>
-    <updated>2026-06-16T01:52:17.719Z</updated>
+    <updated>2026-06-16T02:05:32.734Z</updated>
   </entry>
   <entry>
     <author>
@@ -69,7 +69,7 @@
       <![CDATA[<h2 id="0x01-DockerHub国内镜像源列表"><a href="#0x01-DockerHub国内镜像源列表" class="headerlink" title="0x01 DockerHub国内镜像源列表"></a>0x01 DockerHub国内镜像源列表</]]>
     </summary>
     <title>DockerHub国内镜像源列表</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.735Z</updated>
   </entry>
   <entry>
     <author>
@@ -89,7 +89,7 @@
       <![CDATA[<h2 id="0x01-查看系统磁盘"><a href="#0x01-查看系统磁盘" class="headerlink" title="0x01 查看系统磁盘"></a>0x01 查看系统磁盘</h2><p>使用<code>lsblk</code>可查看分区情况与磁盘大小，使]]>
     </summary>
     <title>Linux磁盘分区并挂载</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.737Z</updated>
   </entry>
   <entry>
     <author>
@@ -108,7 +108,7 @@
       <![CDATA[<h2 id="0x01-下载Redis"><a href="#0x01-下载Redis" class="headerlink" title="0x01 下载Redis"></a>0x01 下载Redis</h2><p>直接登录官网下载你需要的版本<a href="https:/]]>
     </summary>
     <title>Redis6.0.10编译安装配置</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.735Z</updated>
   </entry>
   <entry>
     <author>
@@ -127,7 +127,7 @@
       <![CDATA[<h2 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h2><p>更换了新主题，在hexo g和hexo s的时候总会报如下错误，在主题github issues逛了]]>
     </summary>
     <title>Hexo版本升级指南</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.736Z</updated>
   </entry>
   <entry>
     <author>
@@ -147,7 +147,7 @@
       <![CDATA[<h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>当linux系统上有多个单独网卡，又想充分利用这些网卡，同时对外提供一个统一的网络地址，以使得增大网]]>
     </summary>
     <title>Centos7双网卡绑定配置 bonding</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.735Z</updated>
   </entry>
   <entry>
     <author>
@@ -167,7 +167,7 @@
       <![CDATA[<h2 id="0x01-前-言"><a href="#0x01-前-言" class="headerlink" title="0x01 前 言"></a>0x01 前 言</h2><p>Linux系统被应用于大部分企业的服务器上，因此在等保测评中主机加固也是必须要完成的一项环节]]>
     </summary>
     <title>linux主机加固</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.737Z</updated>
   </entry>
   <entry>
     <author>
@@ -192,7 +192,7 @@
 <p>本]]>
     </summary>
     <title>基于Docker部署jumpserver环境</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.735Z</updated>
   </entry>
   <entry>
     <author>
@@ -211,7 +211,7 @@
       <![CDATA[<h2 id="0x01-重置管理员密码"><a href="#0x01-重置管理员密码" class="headerlink" title="0x01 重置管理员密码"></a>0x01 重置管理员密码</h2><figure class="highlight bash"><t]]>
     </summary>
     <title>如何重置jumpserver管理员密码</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.736Z</updated>
   </entry>
   <entry>
     <author>
@@ -232,7 +232,7 @@
 <h2 id="0x01-前提条件"><a href="#0x01-前提条件" class="headerli]]>
     </summary>
     <title>基于Docker部署GitLab环境搭建</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.735Z</updated>
   </entry>
   <entry>
     <author>
@@ -251,7 +251,7 @@
       <![CDATA[<h2 id="0x01-Docker-简介"><a href="#0x01-Docker-简介" class="headerlink" title="0x01 Docker 简介"></a>0x01 Docker 简介</h2><p>Docker是一个软件集装箱化平台，这意味着]]>
     </summary>
     <title>安装配置Docker环境</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.735Z</updated>
   </entry>
   <entry>
     <author>
@@ -272,7 +272,7 @@
 <p>MySQL版本：MySQL-8.0.1]]>
     </summary>
     <title>CentOS8编译安装配置MySQL8数据库</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.735Z</updated>
   </entry>
   <entry>
     <author>
@@ -291,7 +291,7 @@
       <![CDATA[<h2 id="0x01-故障情况"><a href="#0x01-故障情况" class="headerlink" title="0x01 故障情况"></a>0x01 故障情况</h2><p>由于MySQL编码原因会导致数据库出现乱码。修改为UTF-8后发现将emoji 文字]]>
     </summary>
     <title>修改MySQL数据库字符编码为utf8mb4解决中文乱码</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.737Z</updated>
   </entry>
   <entry>
     <author>
@@ -318,7 +318,7 @@
 <h2 id="0x01-Windows-操作]]>
     </summary>
     <title>常用操作系统镜像下载</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.736Z</updated>
   </entry>
   <entry>
     <author>
@@ -339,7 +339,7 @@
       <![CDATA[<h2 id="0x01-准备工作："><a href="#0x01-准备工作：" class="headerlink" title="0x01 准备工作："></a>0x01 准备工作：</h2><p>安装 PAM 的bai cracklib 模块，cracklib 能提供额外]]>
     </summary>
     <title>Linux安全加固措施方案之密码加固</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.737Z</updated>
   </entry>
   <entry>
     <author>
@@ -359,7 +359,7 @@
       <![CDATA[<h2 id="0x01-CentOS-系统修复"><a href="#0x01-CentOS-系统修复" class="headerlink" title="0x01 CentOS 系统修复"></a>0x01 CentOS 系统修复</h2><p>首先，光盘引导选择<code]]>
     </summary>
     <title>Linux 系统修复</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.738Z</updated>
   </entry>
   <entry>
     <author>
@@ -379,7 +379,7 @@
       <![CDATA[<h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>文件服务器，是一个公司最常用的服务应用，每个公司企业基本都有自己的文件服务器实，现储存分享，上传下载]]>
     </summary>
     <title>Centos7 搭建开源个人网盘Nextcloud与常用插件</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.738Z</updated>
   </entry>
   <entry>
     <author>
@@ -399,7 +399,7 @@
       <![CDATA[<h2 id="0x01-查看系统磁盘"><a href="#0x01-查看系统磁盘" class="headerlink" title="0x01 查看系统磁盘"></a>0x01 查看系统磁盘</h2><p>使用<code>lsblk</code>可查看分区情况与磁盘大小，使]]>
     </summary>
     <title>Linux 存储扩容，分区扩容</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.737Z</updated>
   </entry>
   <entry>
     <author>
@@ -419,6 +419,6 @@
       <![CDATA[<h2 id="0x01-CentOS"><a href="#0x01-CentOS" class="headerlink" title="0x01 CentOS"></a>0x01 CentOS</h2><figure class="highlight bash"><table]]>
     </summary>
     <title>Linux 查看服务器远程管理IP(DELL iDrac和HP iLO)</title>
-    <updated>2026-06-16T01:52:17.720Z</updated>
+    <updated>2026-06-16T02:05:32.737Z</updated>
   </entry>
 </feed>
