@@ -10,7 +10,7 @@
   <rights>All rights reserved 2026, Jeremy Peng</rights>
   <subtitle>留下运维点滴记忆，悠悠岁月慢慢回味。</subtitle>
   <title>攀岩之鹿</title>
-  <updated>2026-06-16T02:05:32.737Z</updated>
+  <updated>2026-06-16T02:57:02.603Z</updated>
   <entry>
     <author>
       <name>Jeremy Peng</name>
@@ -19,7 +19,7 @@
     <category term="Linux" scheme="https://aisk.cc/tags/Linux/"/>
     <category term="RAID" scheme="https://aisk.cc/tags/RAID/"/>
     <content>
-      <![CDATA[<p>在Linux系统中，使用NVMe SSD（非易失性内存表达存储）进行软阵列（软件定义的存储阵列）的设置通常涉及使用RAID技术，但与传统SATA或SAS硬盘的RAID实现略有不同。NVMe SSD由于其高速和低延迟的特性，在构建高性能存储解决方案时非常受欢迎。</p><p>以下是在 Linux 下 NVMe 软 RAID（mdadm）完整操作手册，覆盖 RAID 0&#x2F;1&#x2F;5&#x2F;10 四种最常用级别，适用于 Debian&#x2F;Ubuntu、RHEL&#x2F;Rocky&#x2F;CentOS、openSUSE 等主流发行版。全部命令均在实际 NVMe 节点（<code>/dev/nvme*n1</code>）验证通过，可直接复制使用。</p><p>下面是一些步骤和工具，可以帮助你在Linux系统上配置NVMe SSD的软阵列：</p><h2 id="一、前置准备"><a href="#一、前置准备" class="headerlink" title="一、前置准备"></a>一、前置准备</h2><h3 id="1-确认-NVMe-盘"><a href="#1-确认-NVMe-盘" class="headerlink" title="1.确认 NVMe 盘"></a>1.确认 NVMe 盘</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk -d -o NAME,MODEL,SIZE,ROTA</span><br></pre></td></tr></table></figure><p>假设得到 4 块盘：<code>/dev/nvme0n1</code> <code>/dev/nvme1n1</code> <code>/dev/nvme2n1</code> <code>/dev/nvme3n1</code></p><h3 id="2-安装-mdadm"><a href="#2-安装-mdadm" class="headerlink" title="2.安装 mdadm"></a>2.安装 mdadm</h3><p>MDADM是Linux中用于管理软件RAID的工具。你可以使用<code>mdadm</code>命令来创建和管理RAID阵列。</p><p>1.<strong>安装mdadm</strong>：<br>   确保你的系统上安装了<code>mdadm</code>。在大多数Linux发行版中，你可以通过包管理器安装它。例如，在Ubuntu或Debian上，你可以使用：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Debian/Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt install -y mdadm</span><br><span class="line"></span><br><span class="line"><span class="comment"># RHEL/CentOS/Rocky</span></span><br><span class="line"><span class="built_in">sudo</span> dnf install -y mdadm</span><br><span class="line"></span><br><span class="line"><span class="comment"># openSUSE</span></span><br><span class="line"><span class="built_in">sudo</span> zypper <span class="keyword">in</span> -y mdadm</span><br></pre></td></tr></table></figure><h3 id="3-备份数据-全盘会被清空！"><a href="#3-备份数据-全盘会被清空！" class="headerlink" title="3.备份数据 ( 全盘会被清空！)"></a>3.备份数据 ( 全盘会被清空！)</h3><p>   略</p><h2 id="二、统一清理磁盘元数据（必做）"><a href="#二、统一清理磁盘元数据（必做）" class="headerlink" title="二、统一清理磁盘元数据（必做）"></a>二、统一清理磁盘元数据（必做）</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> /dev/nvme&#123;0..3&#125;n1; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">sudo</span> wipefs -a -f <span class="string">&quot;<span class="variable">$i</span>&quot;</span></span><br><span class="line">  <span class="built_in">sudo</span> mdadm --zero-superblock <span class="string">&quot;<span class="variable">$i</span>&quot;</span> 2&gt;/dev/null || <span class="literal">true</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure><h2 id="三、按需选择-RAID-级别并创建"><a href="#三、按需选择-RAID-级别并创建" class="headerlink" title="三、按需选择 RAID 级别并创建"></a>三、按需选择 RAID 级别并创建</h2><p>   下面给出 4 种场景，<strong>只需选一种</strong>执行即可。</p><ul><li>RAID 0（条带，2 盘，性能最高，无冗余）</li></ul>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --create /dev/md0 --level=0 \</span><br><span class="line">  --raid-devices=2 /dev/nvme0n1 /dev/nvme1n1</span><br></pre></td></tr></table></figure><ul><li>RAID 1（镜像，2 盘，50 % 容量，允许 1 盘坏）</li></ul>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --create /dev/md0 --level=1 \</span><br><span class="line">  --raid-devices=2 /dev/nvme0n1 /dev/nvme1n1</span><br></pre></td></tr></table></figure><ul><li>RAID 5（3 盘起，允许 1 盘坏，容量 N-1）</li></ul>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --create /dev/md0 --level=5 \</span><br><span class="line">  --raid-devices=3 /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1</span><br></pre></td></tr></table></figure><ul><li>RAID 10（4 盘起，允许每组 1 盘坏，容量 50 %）</li></ul>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --create /dev/md0 --level=10 \</span><br><span class="line">  --raid-devices=4 /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1</span><br></pre></td></tr></table></figure><h2 id="四、等待同步完成"><a href="#四、等待同步完成" class="headerlink" title="四、等待同步完成"></a>四、等待同步完成</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --detail /dev/md0 <span class="comment">## 检查阵列</span></span><br><span class="line"></span><br><span class="line">watch -n1 <span class="built_in">cat</span> /proc/mdstat   <span class="comment"># 看到 [UU..] 即同步完成</span></span><br></pre></td></tr></table></figure><h2 id="五、格式化-挂载"><a href="#五、格式化-挂载" class="headerlink" title="五、格式化 &amp; 挂载"></a>五、格式化 &amp; 挂载</h2><p>   1.建立文件系统（xfs 性能最佳，ext4 兼容性最好，自行二选一）</p>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.xfs -f /dev/md0        <span class="comment"># 或 mkfs.ext4 -F /dev/md0</span></span><br></pre></td></tr></table></figure><p>   2.开机挂载</p>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /data</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;UUID=<span class="subst">$(blkid -s UUID -o value /dev/md0)</span> /data xfs defaults 0 0&quot;</span> | \</span><br><span class="line">  <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/fstab</span><br><span class="line"><span class="built_in">sudo</span> mount -a &amp;&amp; <span class="built_in">df</span> -h /data</span><br></pre></td></tr></table></figure><p>   通过以上步骤，你可以在Linux系统上有效地使用NVMe SSD来创建软阵列，无论是通过MDADM还是LVM。选择哪种方法取决于你的具体需求和对灵活性的要求</p><h2 id="六、持久化-RAID-配置（关键！）"><a href="#六、持久化-RAID-配置（关键！）" class="headerlink" title="六、持久化 RAID 配置（关键！）"></a>六、持久化 RAID 配置（关键！）</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --detail --scan | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/mdadm/mdadm.conf</span><br><span class="line"><span class="comment"># RHEL 系列路径为 /etc/mdadm.conf</span></span><br><span class="line"><span class="built_in">sudo</span> dracut -f   <span class="comment"># 或 update-initramfs -u（Debian/Ubuntu）</span></span><br></pre></td></tr></table></figure><h2 id="七、日常运维命令"><a href="#七、日常运维命令" class="headerlink" title="七、日常运维命令"></a>七、日常运维命令</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/mdstat                    <span class="comment"># 实时状态</span></span><br><span class="line"><span class="built_in">sudo</span> mdadm --detail /dev/md0        <span class="comment"># 详细信息</span></span><br><span class="line"><span class="built_in">sudo</span> mdadm -f /dev/md0 /dev/nvme1n1 <span class="comment"># 手动标记故障盘</span></span><br><span class="line"><span class="built_in">sudo</span> mdadm -r /dev/md0 /dev/nvme1n1 <span class="comment"># 移除故障盘</span></span><br><span class="line"><span class="built_in">sudo</span> mdadm -a /dev/md0 /dev/nvme4n1 <span class="comment"># 插入新盘重建</span></span><br></pre></td></tr></table></figure><h2 id="八、故障邮件告警（可选）"><a href="#八、故障邮件告警（可选）" class="headerlink" title="八、故障邮件告警（可选）"></a>八、故障邮件告警（可选）</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;MAILADDR your@email.com&quot;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/mdadm/mdadm.conf</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart mdmonitor</span><br></pre></td></tr></table></figure><h2 id="九、常见坑与注意事项"><a href="#九、常见坑与注意事项" class="headerlink" title="九、常见坑与注意事项"></a>九、常见坑与注意事项</h2><ol><li><p><strong>≥2 TB 的盘一定要 GPT 分区？</strong><br>其实 mdadm 可以直接用裸盘，省去分区步骤；但若主板&#x2F;UEFI 强制要求，可提前用 <code>parted</code> 创建 GPT + Linux RAID 分区标志，再 <code>wipefs -a</code> 即可。</p></li><li><p><strong>NVMe 命名规则</strong><br>第一块 NVMe 盘为 <code>/dev/nvme0n1</code>，其第一个分区为 <code>/dev/nvme0n1p1</code>，别漏掉 <code>p</code>。</p></li><li><p><strong>切忌混用不同容量&#x2F;型号的盘</strong>，会导致性能“就低不就高”。</p></li><li><p><strong>务必做 UPS+定期备份</strong>，软 RAID 不等于备份！</p></li></ol><hr><p>   至此，NVMe 全软阵列已可投入生产。祝使用顺利！</p>]]>
+      <![CDATA[<p>在Linux系统中，使用NVMe SSD（非易失性内存表达存储）进行软阵列（软件定义的存储阵列）的设置通常涉及使用RAID技术，但与传统SATA或SAS硬盘的RAID实现略有不同。NVMe SSD由于其高速和低延迟的特性，在构建高性能存储解决方案时非常受欢迎。</p><p>以下是在 Linux 下 NVMe 软 RAID（mdadm）完整操作手册，覆盖 RAID 0&#x2F;1&#x2F;5&#x2F;10 四种最常用级别，适用于 Debian&#x2F;Ubuntu、RHEL&#x2F;Rocky&#x2F;CentOS、openSUSE 等主流发行版。全部命令均在实际 NVMe 节点（<code>/dev/nvme*n1</code>）验证通过，可直接复制使用。</p><p>下面是一些步骤和工具，可以帮助你在Linux系统上配置NVMe SSD的软阵列：</p><h2 id="0x01-前置准备"><a href="#0x01-前置准备" class="headerlink" title="0x01 前置准备"></a>0x01 前置准备</h2><h3 id="1-确认-NVMe-盘"><a href="#1-确认-NVMe-盘" class="headerlink" title="1.确认 NVMe 盘"></a>1.确认 NVMe 盘</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsblk -d -o NAME,MODEL,SIZE,ROTA</span><br></pre></td></tr></table></figure><p>假设得到 4 块盘：<code>/dev/nvme0n1</code> <code>/dev/nvme1n1</code> <code>/dev/nvme2n1</code> <code>/dev/nvme3n1</code></p><h3 id="2-安装-mdadm"><a href="#2-安装-mdadm" class="headerlink" title="2.安装 mdadm"></a>2.安装 mdadm</h3><p>MDADM是Linux中用于管理软件RAID的工具。你可以使用<code>mdadm</code>命令来创建和管理RAID阵列。</p><p>1.<strong>安装mdadm</strong>：<br>   确保你的系统上安装了<code>mdadm</code>。在大多数Linux发行版中，你可以通过包管理器安装它。例如，在Ubuntu或Debian上，你可以使用：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Debian/Ubuntu</span></span><br><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt install -y mdadm</span><br><span class="line"></span><br><span class="line"><span class="comment"># RHEL/CentOS/Rocky</span></span><br><span class="line"><span class="built_in">sudo</span> dnf install -y mdadm</span><br><span class="line"></span><br><span class="line"><span class="comment"># openSUSE</span></span><br><span class="line"><span class="built_in">sudo</span> zypper <span class="keyword">in</span> -y mdadm</span><br></pre></td></tr></table></figure><h3 id="3-备份数据-全盘会被清空！"><a href="#3-备份数据-全盘会被清空！" class="headerlink" title="3.备份数据 ( 全盘会被清空！)"></a>3.备份数据 ( 全盘会被清空！)</h3><p>   略</p><h2 id="0x02-统一清理磁盘元数据（必做）"><a href="#0x02-统一清理磁盘元数据（必做）" class="headerlink" title="0x02 统一清理磁盘元数据（必做）"></a>0x02 统一清理磁盘元数据（必做）</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> /dev/nvme&#123;0..3&#125;n1; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">sudo</span> wipefs -a -f <span class="string">&quot;<span class="variable">$i</span>&quot;</span></span><br><span class="line">  <span class="built_in">sudo</span> mdadm --zero-superblock <span class="string">&quot;<span class="variable">$i</span>&quot;</span> 2&gt;/dev/null || <span class="literal">true</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure><h2 id="0x03-按需选择-RAID-级别并创建"><a href="#0x03-按需选择-RAID-级别并创建" class="headerlink" title="0x03 按需选择 RAID 级别并创建"></a>0x03 按需选择 RAID 级别并创建</h2><p>   下面给出 4 种场景，<strong>只需选一种</strong>执行即可。</p><ul><li>RAID 0（条带，2 盘，性能最高，无冗余）</li></ul>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --create /dev/md0 --level=0 \</span><br><span class="line">  --raid-devices=2 /dev/nvme0n1 /dev/nvme1n1</span><br></pre></td></tr></table></figure><ul><li>RAID 1（镜像，2 盘，50 % 容量，允许 1 盘坏）</li></ul>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --create /dev/md0 --level=1 \</span><br><span class="line">  --raid-devices=2 /dev/nvme0n1 /dev/nvme1n1</span><br></pre></td></tr></table></figure><ul><li>RAID 5（3 盘起，允许 1 盘坏，容量 N-1）</li></ul>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --create /dev/md0 --level=5 \</span><br><span class="line">  --raid-devices=3 /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1</span><br></pre></td></tr></table></figure><ul><li>RAID 10（4 盘起，允许每组 1 盘坏，容量 50 %）</li></ul>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --create /dev/md0 --level=10 \</span><br><span class="line">  --raid-devices=4 /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1</span><br></pre></td></tr></table></figure><h2 id="0x04-等待同步完成"><a href="#0x04-等待同步完成" class="headerlink" title="0x04 等待同步完成"></a>0x04 等待同步完成</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --detail /dev/md0 <span class="comment">## 检查阵列</span></span><br><span class="line"></span><br><span class="line">watch -n1 <span class="built_in">cat</span> /proc/mdstat   <span class="comment"># 看到 [UU..] 即同步完成</span></span><br></pre></td></tr></table></figure><h2 id="0x05-格式化-挂载"><a href="#0x05-格式化-挂载" class="headerlink" title="0x05 格式化 &amp; 挂载"></a>0x05 格式化 &amp; 挂载</h2><p>   1.建立文件系统（xfs 性能最佳，ext4 兼容性最好，自行二选一）</p>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkfs.xfs -f /dev/md0        <span class="comment"># 或 mkfs.ext4 -F /dev/md0</span></span><br></pre></td></tr></table></figure><p>   2.开机挂载</p>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /data</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;UUID=<span class="subst">$(blkid -s UUID -o value /dev/md0)</span> /data xfs defaults 0 0&quot;</span> | \</span><br><span class="line">  <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/fstab</span><br><span class="line"><span class="built_in">sudo</span> mount -a &amp;&amp; <span class="built_in">df</span> -h /data</span><br></pre></td></tr></table></figure><p>   通过以上步骤，你可以在Linux系统上有效地使用NVMe SSD来创建软阵列，无论是通过MDADM还是LVM。选择哪种方法取决于你的具体需求和对灵活性的要求</p><h2 id="0x06-持久化-RAID-配置（关键！）"><a href="#0x06-持久化-RAID-配置（关键！）" class="headerlink" title="0x06 持久化 RAID 配置（关键！）"></a>0x06 持久化 RAID 配置（关键！）</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mdadm --detail --scan | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/mdadm/mdadm.conf</span><br><span class="line"><span class="comment"># RHEL 系列路径为 /etc/mdadm.conf</span></span><br><span class="line"><span class="built_in">sudo</span> dracut -f   <span class="comment"># 或 update-initramfs -u（Debian/Ubuntu）</span></span><br></pre></td></tr></table></figure><h2 id="0x07-日常运维命令"><a href="#0x07-日常运维命令" class="headerlink" title="0x07 日常运维命令"></a>0x07 日常运维命令</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/mdstat                    <span class="comment"># 实时状态</span></span><br><span class="line"><span class="built_in">sudo</span> mdadm --detail /dev/md0        <span class="comment"># 详细信息</span></span><br><span class="line"><span class="built_in">sudo</span> mdadm -f /dev/md0 /dev/nvme1n1 <span class="comment"># 手动标记故障盘</span></span><br><span class="line"><span class="built_in">sudo</span> mdadm -r /dev/md0 /dev/nvme1n1 <span class="comment"># 移除故障盘</span></span><br><span class="line"><span class="built_in">sudo</span> mdadm -a /dev/md0 /dev/nvme4n1 <span class="comment"># 插入新盘重建</span></span><br></pre></td></tr></table></figure><h2 id="0x08-故障邮件告警（可选）"><a href="#0x08-故障邮件告警（可选）" class="headerlink" title="0x08 故障邮件告警（可选）"></a>0x08 故障邮件告警（可选）</h2>   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;MAILADDR your@email.com&quot;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/mdadm/mdadm.conf</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart mdmonitor</span><br></pre></td></tr></table></figure><h2 id="0x09-常见坑与注意事项"><a href="#0x09-常见坑与注意事项" class="headerlink" title="0x09 常见坑与注意事项"></a>0x09 常见坑与注意事项</h2><ol><li><p><strong>≥2 TB 的盘一定要 GPT 分区？</strong><br>其实 mdadm 可以直接用裸盘，省去分区步骤；但若主板&#x2F;UEFI 强制要求，可提前用 <code>parted</code> 创建 GPT + Linux RAID 分区标志，再 <code>wipefs -a</code> 即可。</p></li><li><p><strong>NVMe 命名规则</strong><br>第一块 NVMe 盘为 <code>/dev/nvme0n1</code>，其第一个分区为 <code>/dev/nvme0n1p1</code>，别漏掉 <code>p</code>。</p></li><li><p><strong>切忌混用不同容量&#x2F;型号的盘</strong>，会导致性能“就低不就高”。</p></li><li><p><strong>务必做 UPS+定期备份</strong>，软 RAID 不等于备份！</p></li></ol><hr><p>   至此，NVMe 全软阵列已可投入生产。祝使用顺利！</p>]]>
     </content>
     <id>https://aisk.cc/posts/6d7dd596.html</id>
     <link href="https://aisk.cc/posts/6d7dd596.html"/>
@@ -29,7 +29,7 @@
 <p]]>
     </summary>
     <title>Linux操作系统组合软阵列</title>
-    <updated>2026-06-16T02:05:32.737Z</updated>
+    <updated>2026-06-16T02:57:02.603Z</updated>
   </entry>
   <entry>
     <author>
@@ -49,7 +49,7 @@
 <p>参考指南：<a href="https://prometheus.io/docs/guides/basic-auth/">Securing Prome]]>
     </summary>
     <title>Prometheus配置基本授权-账号密码登录</title>
-    <updated>2026-06-16T02:05:32.734Z</updated>
+    <updated>2026-06-16T02:57:02.601Z</updated>
   </entry>
   <entry>
     <author>
@@ -69,7 +69,7 @@
       <![CDATA[<h2 id="0x01-DockerHub国内镜像源列表"><a href="#0x01-DockerHub国内镜像源列表" class="headerlink" title="0x01 DockerHub国内镜像源列表"></a>0x01 DockerHub国内镜像源列表</]]>
     </summary>
     <title>DockerHub国内镜像源列表</title>
-    <updated>2026-06-16T02:05:32.735Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -89,7 +89,7 @@
       <![CDATA[<h2 id="0x01-查看系统磁盘"><a href="#0x01-查看系统磁盘" class="headerlink" title="0x01 查看系统磁盘"></a>0x01 查看系统磁盘</h2><p>使用<code>lsblk</code>可查看分区情况与磁盘大小，使]]>
     </summary>
     <title>Linux磁盘分区并挂载</title>
-    <updated>2026-06-16T02:05:32.737Z</updated>
+    <updated>2026-06-16T02:57:02.603Z</updated>
   </entry>
   <entry>
     <author>
@@ -108,7 +108,7 @@
       <![CDATA[<h2 id="0x01-下载Redis"><a href="#0x01-下载Redis" class="headerlink" title="0x01 下载Redis"></a>0x01 下载Redis</h2><p>直接登录官网下载你需要的版本<a href="https:/]]>
     </summary>
     <title>Redis6.0.10编译安装配置</title>
-    <updated>2026-06-16T02:05:32.735Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -127,7 +127,7 @@
       <![CDATA[<h2 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h2><p>更换了新主题，在hexo g和hexo s的时候总会报如下错误，在主题github issues逛了]]>
     </summary>
     <title>Hexo版本升级指南</title>
-    <updated>2026-06-16T02:05:32.736Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -147,7 +147,7 @@
       <![CDATA[<h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>当linux系统上有多个单独网卡，又想充分利用这些网卡，同时对外提供一个统一的网络地址，以使得增大网]]>
     </summary>
     <title>Centos7双网卡绑定配置 bonding</title>
-    <updated>2026-06-16T02:05:32.735Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -167,7 +167,7 @@
       <![CDATA[<h2 id="0x01-前-言"><a href="#0x01-前-言" class="headerlink" title="0x01 前 言"></a>0x01 前 言</h2><p>Linux系统被应用于大部分企业的服务器上，因此在等保测评中主机加固也是必须要完成的一项环节]]>
     </summary>
     <title>linux主机加固</title>
-    <updated>2026-06-16T02:05:32.737Z</updated>
+    <updated>2026-06-16T02:57:02.603Z</updated>
   </entry>
   <entry>
     <author>
@@ -192,7 +192,7 @@
 <p>本]]>
     </summary>
     <title>基于Docker部署jumpserver环境</title>
-    <updated>2026-06-16T02:05:32.735Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -211,15 +211,15 @@
       <![CDATA[<h2 id="0x01-重置管理员密码"><a href="#0x01-重置管理员密码" class="headerlink" title="0x01 重置管理员密码"></a>0x01 重置管理员密码</h2><figure class="highlight bash"><t]]>
     </summary>
     <title>如何重置jumpserver管理员密码</title>
-    <updated>2026-06-16T02:05:32.736Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
       <name>Jeremy Peng</name>
     </author>
     <category term="环境部署" scheme="https://aisk.cc/categories/%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/"/>
-    <category term="Linux" scheme="https://aisk.cc/tags/Linux/"/>
     <category term="GitLab" scheme="https://aisk.cc/tags/GitLab/"/>
+    <category term="Linux" scheme="https://aisk.cc/tags/Linux/"/>
     <category term="Docker" scheme="https://aisk.cc/tags/Docker/"/>
     <content>
       <![CDATA[<p>最近在学习自动化部署的一些内容，涉及到的内容有Docker、Jenkins、Gitlab等内容，今天通过docker玩了一遍gitlab，下面是一些心得。</p><h2 id="0x01-前提条件"><a href="#0x01-前提条件" class="headerlink" title="0x01 前提条件"></a>0x01 前提条件</h2><ul><li>（1）存在docker</li><li>（2）服务器可以联网（外网）</li><li>（3）服务器内存至少4G（内存不够会出现502错误）</li></ul><h2 id="0x02-安装"><a href="#0x02-安装" class="headerlink" title="0x02 安装"></a>0x02 安装</h2><p>本次安装在CentOS7下进行，下面的命令建议复制到记事本后再从记事本复制</p><h3 id="卸载旧版docker"><a href="#卸载旧版docker" class="headerlink" title="卸载旧版docker"></a>卸载旧版docker</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></table></figure><h3 id="配置-docker-拉取源"><a href="#配置-docker-拉取源" class="headerlink" title="配置 docker 拉取源"></a>配置 docker 拉取源</h3><p>如不配置源因网络原因可能会拉取失败，配置国内拉取源提升稳定性。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /etc/docker</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#123;</span></span><br><span class="line"><span class="string">    \&quot;registry-mirrors\&quot; : [</span></span><br><span class="line"><span class="string">    \&quot;https://registry.docker-cn.com\&quot;,</span></span><br><span class="line"><span class="string">    \&quot;https://docker.mirrors.ustc.edu.cn\&quot;,</span></span><br><span class="line"><span class="string">    \&quot;http://hub-mirror.c.163.com\&quot;,</span></span><br><span class="line"><span class="string">    \&quot;https://cr.console.aliyun.com/\&quot;</span></span><br><span class="line"><span class="string">  ]</span></span><br><span class="line"><span class="string">&#125;&quot;</span>&gt;&gt;/etc/docker/daemon.json</span><br></pre></td></tr></table></figure><h3 id="安装docker并配置docker源"><a href="#安装docker并配置docker源" class="headerlink" title="安装docker并配置docker源"></a>安装docker并配置docker源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install yum-utils</span><br><span class="line">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">yum-config-manager --<span class="built_in">enable</span> docker-ce-nightly</span><br><span class="line">yum-config-manager --<span class="built_in">enable</span> docker-ce-test</span><br><span class="line">yum makecache fast</span><br><span class="line">yum -y install docker-ce docker-ce-cli containerd.io</span><br><span class="line">systemctl start docker &amp;&amp; systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></table></figure><h3 id="gitlab镜像拉取"><a href="#gitlab镜像拉取" class="headerlink" title="gitlab镜像拉取"></a>gitlab镜像拉取</h3><blockquote><p>gitlab-ce为稳定版本，后面不填写版本则默认pull最新latest版本</p></blockquote><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker pull gitlab/gitlab-ce:latest</span><br><span class="line">$ <span class="built_in">mkdir</span> -p /home/gitlab/&#123;config,logs,data&#125;</span><br></pre></td></tr></table></figure><h2 id="0x03-配置环境"><a href="#0x03-配置环境" class="headerlink" title="0x03 配置环境"></a>0x03 配置环境</h2><h3 id="运行gitlab镜像"><a href="#运行gitlab镜像" class="headerlink" title="运行gitlab镜像"></a>运行gitlab镜像</h3><p>拉取gitlab镜像并配置环境</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker run -d \</span><br><span class="line"> -p 443:443 \</span><br><span class="line"> -p 80:80 \</span><br><span class="line"> -p 222:22 \</span><br><span class="line"> --name gitlab \</span><br><span class="line"> --restart always \</span><br><span class="line"> -v /home/gitlab/config:/etc/gitlab \</span><br><span class="line"> -v /home/gitlab/logs:/var/log/gitlab \</span><br><span class="line"> -v /home/gitlab/data:/var/opt/gitlab \</span><br><span class="line"> gitlab/gitlab-ce</span><br></pre></td></tr></table></figure><ul><li>-d：后台运行</li><li>-p：将容器内部端口向外映射</li><li>–name：命名容器名称</li><li>-v：将容器内数据文件夹或者日志、配置等文件夹挂载到宿主机指定目录</li></ul><h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><p>按上面的方式，gitlab容器运行没问题，但在gitlab上创建项目的时候，生成项目的URL访问地址是按容器的hostname来生成的，也就是容器的id。作为gitlab服务器，我们需要一个固定的URL访问地址，于是需要配置gitlab.rb（宿主机路径：<code>/home/gitlab/config/gitlab.rb</code>）。</p><p>gitlab.rb文件内容默认全是注释</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim /home/gitlab/config/gitlab.rb</span><br><span class="line"><span class="comment"># 配置http协议所使用的访问地址,不加端口号默认为80</span></span><br><span class="line">external_url <span class="string">&#x27;http://192.168.199.231&#x27;</span></span><br><span class="line"><span class="comment"># 配置ssh协议所使用的访问地址和端口</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;gitlab_ssh_host&#x27;</span>] = <span class="string">&#x27;192.168.199.231&#x27;</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;gitlab_shell_ssh_port&#x27;</span>] = 222</span><br><span class="line"><span class="comment"># 此端口是run时22端口映射的222端口</span></span><br><span class="line">:wq <span class="comment">#保存配置文件并退出</span></span><br></pre></td></tr></table></figure><p>修改邮箱</p><p>在gitlab.rb文件的最后添加如下代码</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 是否启用</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_enable&#x27;</span>] = <span class="literal">true</span></span><br><span class="line"><span class="comment"># SMTP服务的地址</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_address&#x27;</span>] = <span class="string">&quot;smtp.qq.com&quot;</span></span><br><span class="line"><span class="comment"># 端口</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_port&#x27;</span>] = 465</span><br><span class="line"><span class="comment"># 你的QQ邮箱（发送账号）</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_user_name&#x27;</span>] = <span class="string">&quot;xxx@qq.com&quot;</span></span><br><span class="line"><span class="comment"># 授权码</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_password&#x27;</span>] = <span class="string">&quot;********&quot;</span></span><br><span class="line"><span class="comment"># 域名</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_domain&#x27;</span>] = <span class="string">&quot;smtp.qq.com&quot;</span></span><br><span class="line"><span class="comment"># 登录验证</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_authentication&#x27;</span>] = <span class="string">&quot;login&quot;</span></span><br><span class="line"><span class="comment"># 使用了465端口，就需要配置下面三项</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_enable_starttls_auto&#x27;</span>] = <span class="literal">true</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_tls&#x27;</span>] = <span class="literal">true</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;smtp_openssl_verify_mode&#x27;</span>] = <span class="string">&#x27;none&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 你的QQ邮箱（发送账号）</span></span><br><span class="line">gitlab_rails[<span class="string">&#x27;gitlab_email_from&#x27;</span>] = <span class="string">&#x27;xxx@qq.com&#x27;</span></span><br></pre></td></tr></table></figure><p>应用配置</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure><p>修改port</p><p>修改gitlab.yml文件</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">// 文件路径 /opt/gitlab/embedded/service/gitlab-rails/config</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cd</span> /opt/gitlab/embedded/service/gitlab-rails/config</span><br><span class="line">vim gitlab.yml</span><br><span class="line">// 修改port 为8090</span><br></pre></td></tr></table></figure><p>重启gitlab容器</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker restart gitlab</span><br><span class="line"><span class="comment"># 查看启动情况</span></span><br><span class="line">$ docker ps</span><br><span class="line"><span class="comment"># 登录容器</span></span><br><span class="line">$ docker <span class="built_in">exec</span> -it gitlab <span class="comment">#!/usr/bin/env bash</span></span><br></pre></td></tr></table></figure><p>验证邮箱服务</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">// 在容器中进入命令行</span><br><span class="line"><span class="built_in">sudo</span> gitlab-rails console</span><br><span class="line">// 测试邮件发送</span><br><span class="line"><span class="built_in">sudo</span> Notify.test_email(<span class="string">&quot;xxx@163.com&quot;</span>,<span class="string">&quot;title&quot;</span>,<span class="string">&quot;gitlab&quot;</span>).deliver_now</span><br><span class="line">// 退出命令行</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">exit</span></span><br><span class="line">// 退出容器</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">exit</span></span><br></pre></td></tr></table></figure><p>此时项目的仓库地址就变了。如果ssh端口地址不是默认的22，就会加上ssh:&#x2F;&#x2F; 协议头</p><p>打开浏览器输入ip地址(因为我的gitlab端口为80，所以浏览器url不用输入端口号，如果端口号不是80，则打开为：ip:端口号)</p><p>第一次进入要输入新的root用户密码，设置好之后确定就行<br>下面我们就可以新建一个项目了，点击Create a project<br>创建项目。</p>]]>
@@ -232,7 +232,7 @@
 <h2 id="0x01-前提条件"><a href="#0x01-前提条件" class="headerli]]>
     </summary>
     <title>基于Docker部署GitLab环境搭建</title>
-    <updated>2026-06-16T02:05:32.735Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -251,7 +251,7 @@
       <![CDATA[<h2 id="0x01-Docker-简介"><a href="#0x01-Docker-简介" class="headerlink" title="0x01 Docker 简介"></a>0x01 Docker 简介</h2><p>Docker是一个软件集装箱化平台，这意味着]]>
     </summary>
     <title>安装配置Docker环境</title>
-    <updated>2026-06-16T02:05:32.735Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -272,7 +272,7 @@
 <p>MySQL版本：MySQL-8.0.1]]>
     </summary>
     <title>CentOS8编译安装配置MySQL8数据库</title>
-    <updated>2026-06-16T02:05:32.735Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -291,7 +291,7 @@
       <![CDATA[<h2 id="0x01-故障情况"><a href="#0x01-故障情况" class="headerlink" title="0x01 故障情况"></a>0x01 故障情况</h2><p>由于MySQL编码原因会导致数据库出现乱码。修改为UTF-8后发现将emoji 文字]]>
     </summary>
     <title>修改MySQL数据库字符编码为utf8mb4解决中文乱码</title>
-    <updated>2026-06-16T02:05:32.737Z</updated>
+    <updated>2026-06-16T02:57:02.603Z</updated>
   </entry>
   <entry>
     <author>
@@ -318,7 +318,7 @@
 <h2 id="0x01-Windows-操作]]>
     </summary>
     <title>常用操作系统镜像下载</title>
-    <updated>2026-06-16T02:05:32.736Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -339,7 +339,7 @@
       <![CDATA[<h2 id="0x01-准备工作："><a href="#0x01-准备工作：" class="headerlink" title="0x01 准备工作："></a>0x01 准备工作：</h2><p>安装 PAM 的bai cracklib 模块，cracklib 能提供额外]]>
     </summary>
     <title>Linux安全加固措施方案之密码加固</title>
-    <updated>2026-06-16T02:05:32.737Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -359,7 +359,7 @@
       <![CDATA[<h2 id="0x01-CentOS-系统修复"><a href="#0x01-CentOS-系统修复" class="headerlink" title="0x01 CentOS 系统修复"></a>0x01 CentOS 系统修复</h2><p>首先，光盘引导选择<code]]>
     </summary>
     <title>Linux 系统修复</title>
-    <updated>2026-06-16T02:05:32.738Z</updated>
+    <updated>2026-06-16T02:57:02.603Z</updated>
   </entry>
   <entry>
     <author>
@@ -379,7 +379,7 @@
       <![CDATA[<h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>文件服务器，是一个公司最常用的服务应用，每个公司企业基本都有自己的文件服务器实，现储存分享，上传下载]]>
     </summary>
     <title>Centos7 搭建开源个人网盘Nextcloud与常用插件</title>
-    <updated>2026-06-16T02:05:32.738Z</updated>
+    <updated>2026-06-16T02:57:02.603Z</updated>
   </entry>
   <entry>
     <author>
@@ -399,7 +399,7 @@
       <![CDATA[<h2 id="0x01-查看系统磁盘"><a href="#0x01-查看系统磁盘" class="headerlink" title="0x01 查看系统磁盘"></a>0x01 查看系统磁盘</h2><p>使用<code>lsblk</code>可查看分区情况与磁盘大小，使]]>
     </summary>
     <title>Linux 存储扩容，分区扩容</title>
-    <updated>2026-06-16T02:05:32.737Z</updated>
+    <updated>2026-06-16T02:57:02.602Z</updated>
   </entry>
   <entry>
     <author>
@@ -419,6 +419,6 @@
       <![CDATA[<h2 id="0x01-CentOS"><a href="#0x01-CentOS" class="headerlink" title="0x01 CentOS"></a>0x01 CentOS</h2><figure class="highlight bash"><table]]>
     </summary>
     <title>Linux 查看服务器远程管理IP(DELL iDrac和HP iLO)</title>
-    <updated>2026-06-16T02:05:32.737Z</updated>
+    <updated>2026-06-16T02:57:02.603Z</updated>
   </entry>
 </feed>
